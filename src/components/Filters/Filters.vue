@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Filter from "@/components/Filter/Filter.vue";
-import ArrowDownIcon from "@/assets/ArrowDownIcon.vue";
-import CalendarIcon from "@/assets/CalendarIcon.vue";
+import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
+import CalendarIcon from "@/components/icons/CalendarIcon.vue";
 </script>
 
 <template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import CompanyLogo from '../../assets/CompanyLogo.vue';
-import SquareLogo from '../../assets/SquareLogo.vue';
+import CompanyLogo from '../icons/CompanyLogo.vue';
+import SquareLogo from '../icons/SquareLogo.vue';
 </script>
 
 <template>
@@ -54,7 +54,6 @@ import SquareLogo from '../../assets/SquareLogo.vue';
     margin-top: 5px;
 
     p {
-      font-family: 'Gotham Pro', sans-serif;
       font-size: 14px;
       font-weight: 700;
       color: #55555C;
@@ -74,7 +73,6 @@ import SquareLogo from '../../assets/SquareLogo.vue';
 
 
   p {
-    font-family: 'Gotham Pro', sans-serif;
     font-size: 60px;
     line-height: 66px;
     font-weight: 700;

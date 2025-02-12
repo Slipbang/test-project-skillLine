@@ -15,7 +15,7 @@
 <style scoped>
 .custom-input {
   height: 56px;
-  background-image: url(src/assets/searchIcon.svg);
+  background-image: url(../icons/searchIcon.svg);
   background-repeat: no-repeat;
   background-position: right 15px center;
   width: 300px;

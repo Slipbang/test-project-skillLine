@@ -38,13 +38,13 @@ import Pagination from "@/components/Pagination/Pagination.vue";
 
 <style scoped>
 .stack {
-  height: 932px;
+  min-height: 932px;
   background-color: #F1F4FD;
   width: 100%;
   padding: 48px;
 
   .block {
-    height: 836px;
+    min-height: 836px;
     border-radius: 16px;
     background-color: #FFFFFF;
     padding: 24px;
@@ -57,7 +57,6 @@ import Pagination from "@/components/Pagination/Pagination.vue";
 
       h4 {
         font-weight: 700;
-        font-family: 'Gotham Pro', sans-serif;
         font-size: 32px;
         line-height:  38px;
       }

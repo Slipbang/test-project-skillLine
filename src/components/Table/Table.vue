@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SortIcon from "@/assets/SortIcon.vue";
+import SortIcon from "@/components/icons/SortIcon.vue";
 import CustomCheckbox from "@/components/CustomCheckbox/CustomCheckbox.vue";
 import {mockData} from "@/mockData.ts";
 import {defineEducationCategories} from "@/utils/utilsFunction.ts";
@@ -94,7 +94,6 @@ import {defineEducationCategories} from "@/utils/utilsFunction.ts";
   td {
     height: 63px;
     padding: 0 10px;
-    font-family: 'Gotham Pro', sans-serif;
     font-size: 14px;
     line-height: 18px;
     font-weight: 400;
@@ -120,7 +119,6 @@ import {defineEducationCategories} from "@/utils/utilsFunction.ts";
         border: 1px solid #0E0E101A;
 
         p {
-          font-family: 'Gotham Pro', sans-serif;
           font-size: 12px;
           line-height: 15px;
         }

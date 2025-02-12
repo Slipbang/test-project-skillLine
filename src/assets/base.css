@@ -1,4 +1,29 @@
 /* color palette from <https://github.com/vuejs/theme> */
+
+@font-face {
+  font-family: "Gotham Pro";
+  src: url("src/fonts/gothampro_medium.ttf") format("ttf"),
+  url("src/fonts/gothampro_medium.ttf") format("ttf");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Gotham Pro";
+  src: url('src/fonts/gothampro_bold.ttf') format("ttf"),
+  url("src/fonts/gothampro_bold.ttf") format("ttf");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Gotham Pro";
+  src: url('src/fonts/gothampro_italic.ttf') format("ttf"),
+  url("src/fonts/gothampro_italic.ttf") format("ttf");
+  font-weight: 700;
+  font-style: italic;
+}
+
 :root {
   --vt-c-white: #ffffff;
   --vt-c-white-soft: #f8f8f8;
@@ -59,6 +84,7 @@
 }
 
 body {
+  font-family: "Gotham Pro", sans-serif;
   /*min-height: 100vh;*/
   /*color: var(--color-text);*/
   /*background: var(--color-background);*/

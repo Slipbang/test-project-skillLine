@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import DownloadButtonIcon from '../../assets/DownloadButtonIcon.vue';
+import DownloadButtonIcon from '../icons/DownloadButtonIcon.vue';
 
 defineProps({
   text: String,

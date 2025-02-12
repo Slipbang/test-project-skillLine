@@ -20,6 +20,9 @@ defineProps({
   background-color: var(--btn-bgc);
   cursor: pointer;
   margin: 0 1px;
+  font-weight: 400;
+  font-size: 12px;
+
 }
 
 .page-button:hover {

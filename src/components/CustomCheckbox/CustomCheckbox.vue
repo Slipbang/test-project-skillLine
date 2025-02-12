@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import CheckboxIcon from "@/assets/CheckboxIcon.vue";
-import IconDelete from '../../assets/iconDelete.svg';
-import IconAdd from "@/assets/IconAdd.vue";
+import CheckboxIcon from "@/components/icons/CheckboxIcon.vue";
+import IconAdd from "@/components/icons/IconAdd.vue";
+import IconDelete from "@/components/icons/IconDelete.vue";
 defineProps({
   checked: Boolean,
   fillColor: String,
