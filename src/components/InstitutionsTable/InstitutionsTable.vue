@@ -3,10 +3,11 @@ import Input from "@/components/Input/Input.vue";
 import Button from "@/components/Button/Button.vue";
 import Filters from "@/components/Filters/Filters.vue";
 import Table from "@/components/Table/Table.vue";
-import Pagination from "@/components/Pagination/Pagination.vue";
 import {jsonToCSV} from "@/utils/utilsFunction.ts";
 import DataSelector from "@/components/DataSelector/DataSelector.vue";
 import PagesButtons from "@/components/Pagination/PagesButtons.vue";
+import {ref} from "vue";
+import CustomCalendar from "@/components/CustomCalendar/CustomCalendar.vue";
 
 const jsonData = [
   { name: "Иван", age: 25, city: "Москва" },
@@ -19,12 +20,18 @@ const headersMap = {
   age: "Возраст",
   city: "Город"
 };
-
+const isCalendarShown = ref(true);
 //jsonToCSV(jsonData, headersMap);
+
 </script>
 
 <template>
  <div class="stack">
+   <div class="calendar">
+     <CustomCalendar
+         v-if="isCalendarShown"
+     />
+   </div>
 
    <div class="block">
 
@@ -61,6 +68,12 @@ const headersMap = {
   background-color: #F1F4FD;
   width: 100%;
   padding: 48px;
+
+  .calendar {
+    position: absolute;
+    top: 520px;
+    left: 275px;
+  }
 
   .block {
     min-height: 836px;

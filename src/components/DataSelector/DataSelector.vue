@@ -2,10 +2,9 @@
 
 import Dropdown from "@/components/Dropdown/Dropdown.vue";
 import {ref} from "vue";
-// Состояние для Dropdown (аналог state в React)
+
 const isDropdownOpen = ref(false);
 
-// Функция для изменения состояния (аналог setState в React)
 const toggleDropdown = () => {
   isDropdownOpen.value = !isDropdownOpen.value;
 };
