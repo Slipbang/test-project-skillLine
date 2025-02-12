@@ -2,8 +2,6 @@
 
 </script>
 
-
-
 <template>
   <input
       class="custom-input"

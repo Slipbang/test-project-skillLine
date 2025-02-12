@@ -4,6 +4,23 @@ import Button from "@/components/Button/Button.vue";
 import Filters from "@/components/Filters/Filters.vue";
 import Table from "@/components/Table/Table.vue";
 import Pagination from "@/components/Pagination/Pagination.vue";
+import {jsonToCSV} from "@/utils/utilsFunction.ts";
+import DataSelector from "@/components/DataSelector/DataSelector.vue";
+import PagesButtons from "@/components/Pagination/PagesButtons.vue";
+
+const jsonData = [
+  { name: "Иван", age: 25, city: "Москва" },
+  { name: "Мария", age: 30 }, // Город отсутствует (ячейка будет пустая)
+  { name: "Олег", age: 28, city: "Новосибирск" }
+];
+
+const headersMap = {
+  name: "Имя",
+  age: "Возраст",
+  city: "Город"
+};
+
+//jsonToCSV(jsonData, headersMap);
 </script>
 
 <template>
@@ -29,7 +46,9 @@ import Pagination from "@/components/Pagination/Pagination.vue";
      </div>
 
      <div class="pagination">
-       <Pagination />
+       <PagesButtons />
+
+       <DataSelector />
      </div>
    </div>
 
@@ -81,6 +100,8 @@ import Pagination from "@/components/Pagination/Pagination.vue";
 
     .pagination {
       margin-top: 25px;
+      display: flex;
+      justify-content: space-between;
     }
   }
 }

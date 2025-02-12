@@ -7,7 +7,6 @@ defineProps({
 </script>
 
 <template>
-
   <div class="filter">
     <p>{{text}}</p>
     <component :is="icon" />
