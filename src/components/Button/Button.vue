@@ -37,8 +37,7 @@ defineProps({
     }
 
     p {
-      font-family: 'Gotham Pro', sans-serif;
-      font-weight: 400;
+      font-weight: 700;
       font-size: 16px;
       line-height:  21px;
     }
