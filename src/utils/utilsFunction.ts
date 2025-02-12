@@ -18,7 +18,6 @@ export const defineEducationCategories = (supplements: ISupplements[]) => {
 }
 
 export const extractFirstNumbers = (array: number[], skip: number) => {
-
     const threeNumbers = [...array].splice(skip, 3);
 
     return threeNumbers;
