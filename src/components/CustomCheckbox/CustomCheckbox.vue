@@ -1,0 +1,43 @@
+<script setup lang="ts">
+import CheckboxIcon from "@/assets/CheckboxIcon.vue";
+import IconDelete from '../../assets/iconDelete.svg';
+import IconAdd from "@/assets/IconAdd.vue";
+defineProps({
+  checked: Boolean,
+  fillColor: String,
+})
+</script>
+
+<template>
+  <div class="custom-checkbox">
+    <CheckboxIcon :fill="fillColor" />
+    <div class="inner-element">
+      <IconAdd v-if="checked" />
+      <IconDelete v-else-if="!checked && fillColor !== '#D3D3DE' "/>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+
+
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  margin-right: 10px;
+
+  .inner-element {
+    top: 0;
+    left: 0;
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+</style>
