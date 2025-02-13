@@ -6,8 +6,6 @@ defineProps({
 });
 </script>
 
-
-
 <template>
   <button class="download-button">
     <div>
@@ -17,7 +15,7 @@ defineProps({
   </button>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .download-button {
   height: 56px;
   background-color: #33D35E;
