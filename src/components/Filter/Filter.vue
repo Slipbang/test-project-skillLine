@@ -13,7 +13,7 @@ defineProps({
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .filter {
   height: 56px;
   cursor: pointer;
