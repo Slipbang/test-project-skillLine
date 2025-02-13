@@ -20,7 +20,7 @@ defineProps({
   color: white;
   border: none;
   border-radius: 10px;
-  margin: 0 12px;
+  margin: 0 10px;
   cursor: pointer;
   font-size: 16px;
   line-height: 21px;
