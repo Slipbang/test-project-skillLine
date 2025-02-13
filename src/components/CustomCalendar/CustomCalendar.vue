@@ -3,6 +3,27 @@ import MonthSelector from "@/components/CustomCalendar/MonthSelector/MonthSelect
 import Month from "@/components/CustomCalendar/Month/Month.vue";
 import ButtonPrimary from "@/components/ButtonPrimary/ButtonPrimary.vue";
 import ButtonSecondary from "@/components/ButtonSecondary/ButtonSecondary.vue";
+import {useCalendarStore} from "@/stores/calendar.ts";
+import {useFiltersStore} from "@/stores/filterStore.ts";
+import {storeToRefs} from "pinia";
+
+const calendarStore = useCalendarStore();
+const {dateTo, dateFrom} = storeToRefs(calendarStore);
+
+const filterStore = useFiltersStore();
+const {filterDateTo, filterDateFrom} = storeToRefs(filterStore);
+
+const declineHandler = () => {
+  calendarStore.setDateTo(filterDateTo.value);
+  calendarStore.setDateFrom(filterDateFrom.value);
+  calendarStore.toggleCalendarVisibility();
+}
+
+const saveChangesHandler = () => {
+  filterStore.setDateFrom(dateFrom.value);
+  filterStore.setDateTo(dateTo.value);
+  calendarStore.toggleCalendarVisibility();
+}
 </script>
 
 <template>
@@ -19,9 +40,11 @@ import ButtonSecondary from "@/components/ButtonSecondary/ButtonSecondary.vue";
 
     <div class="buttons-container">
       <ButtonSecondary
+          @click="declineHandler()"
           text="Отмена"
       />
       <ButtonPrimary
+          @click="saveChangesHandler()"
           text="Сохранить"
       />
     </div>
@@ -31,7 +54,6 @@ import ButtonSecondary from "@/components/ButtonSecondary/ButtonSecondary.vue";
 <style scoped lang="scss">
 .custom-calendar {
   width: 364px;
-  height: 482px;
   padding: 11px;
   border-radius: 16px;
   background-color: #F1F4FD;
@@ -58,7 +80,7 @@ import ButtonSecondary from "@/components/ButtonSecondary/ButtonSecondary.vue";
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 15px;
+    margin: 15px 0;
 
     button {
       width: 148px;
