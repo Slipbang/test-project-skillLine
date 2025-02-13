@@ -61,7 +61,7 @@ import ButtonSecondary from "@/components/ButtonSecondary/ButtonSecondary.vue";
     margin-top: 15px;
 
     button {
-      flex-grow: 1;
+      width: 148px;
     }
   }
 }
