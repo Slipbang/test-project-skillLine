@@ -1,33 +1,26 @@
 <script setup lang="ts">
 import Input from "@/components/Input/Input.vue";
-import Button from "@/components/Button/Button.vue";
 import Filters from "@/components/Filters/Filters.vue";
 import Table from "@/components/Table/Table.vue";
 import {jsonToCSV} from "@/utils/utilsFunction.ts";
 import DataSelector from "@/components/DataSelector/DataSelector.vue";
 import PagesButtons from "@/components/Pagination/PagesButtons.vue";
-import {ref} from "vue";
+
 import CustomCalendar from "@/components/CustomCalendar/CustomCalendar.vue";
+import ButtonAccent from "@/components/ButtonAccent/ButtonAccent.vue";
 
-const jsonData = [
-  { name: "Иван", age: 25, city: "Москва" },
-  { name: "Мария", age: 30 }, // Город отсутствует (ячейка будет пустая)
-  { name: "Олег", age: 28, city: "Новосибирск" }
-];
+import { storeToRefs } from "pinia";
+import {useCalendarStore} from "@/stores/calendar.ts";
 
-const headersMap = {
-  name: "Имя",
-  age: "Возраст",
-  city: "Город"
-};
-const isCalendarShown = ref(true);
+const calendarStore = useCalendarStore();
+const {isCalendarShown} = storeToRefs(calendarStore);
 //jsonToCSV(jsonData, headersMap);
 
 </script>
 
 <template>
  <div class="stack">
-   <div class="calendar">
+   <div  class="calendar">
      <CustomCalendar
          v-if="isCalendarShown"
      />
@@ -40,7 +33,7 @@ const isCalendarShown = ref(true);
 
        <div class="controls">
          <Input />
-         <Button text="Скачать" />
+         <ButtonAccent text="Скачать" />
        </div>
      </div>
 
@@ -62,7 +55,7 @@ const isCalendarShown = ref(true);
  </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .stack {
   min-height: 932px;
   background-color: #F1F4FD;
