@@ -61,7 +61,7 @@ import {defineEducationCategories} from "@/utils/utilsFunction.ts";
   </table>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .table {
   width: 100%;
   border-collapse: collapse;
