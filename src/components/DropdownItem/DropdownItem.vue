@@ -18,7 +18,7 @@ defineProps({
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .dropdown-item {
   display: flex;
   align-items: center;
