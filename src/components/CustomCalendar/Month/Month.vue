@@ -1,9 +1,50 @@
 <script setup lang="ts">
-import {CustomCalendar} from "@/components/CustomCalendar/Month/CustomCalendar.ts";
 import {days} from "@/utils/utilsObjects.ts";
-import {defineDayClass} from "@/utils/utilsFunction.ts";
+import {useCalendarStore} from "@/stores/calendar.ts";
+import {storeToRefs} from "pinia";
+import {defineDayClass, equalityTest} from "@/utils/utilsFunction.ts";
+import {ref} from "vue";
+import type {IDayItem} from "@/types/types.ts";
 
-const calendar = new CustomCalendar(new Date());
+const calendarStore = useCalendarStore();
+const {dateTo, dateFrom, selectedMonth, selectedYear, calendar} = storeToRefs(calendarStore);
+
+const isChangingDateFromAvailable = ref(false);
+const isChangingDateToAvailable = ref(false);
+
+const toggleMouseEnterHandler = (date: IDayItem) => {
+  if (isChangingDateFromAvailable.value || isChangingDateToAvailable.value) {
+    isChangingDateToAvailable.value = false;
+    isChangingDateFromAvailable.value = false;
+    return;
+  }
+
+  if (equalityTest(date, dateFrom.value)) {
+    isChangingDateFromAvailable.value = !isChangingDateFromAvailable.value;
+    return;
+  }
+  if (equalityTest(date, dateTo.value)) {
+    isChangingDateToAvailable.value = !isChangingDateToAvailable.value;
+  }
+}
+
+const movePointerHandler = (date: IDayItem) => {
+  if (!isChangingDateToAvailable.value && !isChangingDateFromAvailable.value) return;
+
+  const targetDate = {
+    dayNum: date.dayNum,
+    month: date.month,
+    year: date.year,
+  }
+
+  if (isChangingDateToAvailable.value) {
+    calendarStore.setDateTo(targetDate);
+  }
+
+  if (isChangingDateFromAvailable.value) {
+    calendarStore.setDateFrom(targetDate);
+  }
+}
 
 </script>
 
@@ -14,21 +55,27 @@ const calendar = new CustomCalendar(new Date());
     </div>
     <div class="days-nums-wrapper">
       <div
+          @click="calendarStore.decreaseMonth()"
           class="prev"
           v-for="dayData in calendar.calendarArray.prevMonthDays"
+          :class="defineDayClass(dayData, dateFrom, dateTo)"
       >
         {{ dayData.dayNum }}
       </div>
       <div
           class="current"
-          :class="defineDayClass(dayData.dayNum, dayData.day)"
+          :class="defineDayClass(dayData, dateFrom, dateTo)"
           v-for="dayData in calendar.calendarArray.currMonthDays"
+          @click="toggleMouseEnterHandler(dayData)"
+          @mouseenter="movePointerHandler(dayData)"
       >
         {{ dayData.dayNum }}
       </div>
       <div
+          @click="calendarStore.increaseMonth()"
           class="next"
           v-for="dayData in calendar.calendarArray.nextMonthDays"
+          :class="defineDayClass(dayData, dateFrom, dateTo)"
       >
         {{ dayData.dayNum }}
       </div>
@@ -53,6 +100,9 @@ const calendar = new CustomCalendar(new Date());
       display: flex;
       align-items: center;
       justify-content: center;
+      color: #93939B;
+      font-size: 14px;
+      line-height: 18px;
     }
   }
 
@@ -78,6 +128,10 @@ const calendar = new CustomCalendar(new Date());
     }
 
     div:hover {
+      background-color: #16B240;
+    }
+
+    div:active {
       background-color: #33D35E;
     }
 
