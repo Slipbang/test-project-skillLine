@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import DropdownItem from "@/components/DropdownItem/DropdownItem.vue";
+import DropdownItem from "@/components/Dropdown/DropdownItem/DropdownItem.vue";
 import {useDropdownStore} from "@/stores/dropdown.ts";
 import {storeToRefs} from "pinia";
 
