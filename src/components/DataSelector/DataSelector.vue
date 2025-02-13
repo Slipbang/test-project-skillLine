@@ -2,12 +2,20 @@
 
 import Dropdown from "@/components/Dropdown/Dropdown.vue";
 import {ref} from "vue";
+import {onClickOutside} from "@vueuse/core";
+import {useDropdownStore} from "@/stores/dropdown.ts";
+import {storeToRefs} from "pinia";
 
-const isDropdownOpen = ref(false);
+const dropdownStore = useDropdownStore();
 
-const toggleDropdown = () => {
-  isDropdownOpen.value = !isDropdownOpen.value;
-};
+const dropdownRef = ref<HTMLElement | null>(null);
+const {isDropdownShown} = storeToRefs(dropdownStore)
+
+onClickOutside(dropdownRef,(event) => {
+  if (isDropdownShown.value) {
+    dropdownStore.toggleDropdownVisibility();
+  }
+});
 </script>
 
 <template>
@@ -17,14 +25,15 @@ const toggleDropdown = () => {
     <div class="drop-container">
       <p>Показывать</p>
       <Dropdown
-          :isDropdownOpen="isDropdownOpen"
-          @click="toggleDropdown"
+          ref="dropdownRef"
+          :isDropdownShown="isDropdownShown"
+          @click="dropdownStore.toggleDropdownVisibility()"
       />
     </div>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .selector-container {
   display: flex;
   justify-content: space-between;
