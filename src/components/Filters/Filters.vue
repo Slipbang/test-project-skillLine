@@ -2,11 +2,36 @@
 import Filter from "@/components/Filter/Filter.vue";
 import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
 import CalendarIcon from "@/components/icons/CalendarIcon.vue";
+import {useCalendarStore} from "@/stores/calendar.ts";
+
+import {onClickOutside} from "@vueuse/core";
+import {ref} from "vue";
+import {storeToRefs} from "pinia";
+
+const divRef = ref<HTMLElement | null>(null);
+
+const calendarStore = useCalendarStore();
+const {isCalendarShown} = storeToRefs(calendarStore);
+
+onClickOutside(divRef,(event) => {
+
+  const exceptions = [".custom-calendar"];
+  const clickedInsideException = exceptions.some(selector =>
+      (event.target as HTMLElement).closest(selector)
+  );
+
+  if (!clickedInsideException && isCalendarShown.value) {
+    calendarStore.toggleCalendarVisibility();
+  }
+});
+
 </script>
 
 <template>
   <div class="filters">
     <Filter
+        ref="divRef"
+        @click="calendarStore.toggleCalendarVisibility()"
         text="09 января 2024 - 15 января 2024"
         :icon="CalendarIcon"
     />
@@ -21,7 +46,7 @@ import CalendarIcon from "@/components/icons/CalendarIcon.vue";
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .filters {
   height: 56px;
   display: flex;
