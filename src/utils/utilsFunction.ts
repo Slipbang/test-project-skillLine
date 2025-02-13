@@ -1,10 +1,6 @@
-interface ISupplements {
-    "edu_level": {
-        "name": string;
-        "short_name": string | null;
-        "code": string | null;
-    },
-}
+import type {IDate, IDayItem, ISupplements} from "@/types/types.ts";
+import {months} from "@/utils/utilsObjects.ts";
+
 export const defineEducationCategories = (supplements: ISupplements[]) => {
     const forbidden = ['Не определен',]
 
@@ -23,17 +19,33 @@ export const extractFirstNumbers = (array: number[], skip: number) => {
     return threeNumbers;
 }
 
-export const defineDayClass = (dayNum: number, day: number) => {
-    if (dayNum === 1) {
+export const equalityTest = (target: IDayItem, source: IDate) => {
+    const targetTime = new Date(target.year, target.month + 1, target.dayNum).getTime();
+    const sourceTime = new Date(source.year!, source.month! + 1, source.dayNum!).getTime();
+
+    return targetTime === sourceTime;
+}
+
+export const defineDayClass = (item: IDayItem, targetFrom: IDate, targetTo: IDate) => {
+
+    const itemDate = new Date(item.year, item.month, item.dayNum);
+    const fromDate = new Date(targetFrom.year!, targetFrom.month!, targetFrom.dayNum!);
+    const toDate = new Date(targetTo.year!, targetTo.month!, targetTo.dayNum!);
+
+    if (itemDate < fromDate || itemDate > toDate) {
+        return '';
+    }
+
+    if (itemDate.getTime() === fromDate.getTime()) {
         return 'selected-primary-first';
     }
-    if (dayNum === 28) {
+    if (itemDate.getTime() === toDate.getTime()) {
         return 'selected-primary-last';
     }
 
     let className = 'selected';
 
-    switch (day) {
+    switch (item.day) {
         case 1: {
             className += '-first';
             break;
@@ -50,6 +62,11 @@ export const defineDayClass = (dayNum: number, day: number) => {
     return className;
 }
 
+export const defineDateText = (date: IDate) => {
+    return `${date.dayNum} ${months[date?.month || 0]} ${date.year}`
+}
+
+// сменить на xlsx
 export function jsonToCSV(jsonData: any, headersMap: any, filename = "data.csv") {
     if (!jsonData || jsonData.length === 0) {
         console.error("Пустой JSON!");
@@ -58,12 +75,12 @@ export function jsonToCSV(jsonData: any, headersMap: any, filename = "data.csv")
 
     const csvRows = [];
 
-    // 1️⃣ Заголовки
+    // Заголовки
     const keys = Object.keys(headersMap); // Ключи JSON
     const headers = keys.map(key => headersMap[key]); // Названия колонок
     csvRows.push(headers.join(";")); // Используем ";" как разделитель (можно поменять)
 
-    // 2️⃣ Данные (заполняем таблицу)
+    // Данные (заполняем таблицу)
     jsonData.forEach((row: any) => {
         const values = keys.map(key => {
             const value = row[key] !== undefined ? row[key] : ""; // Если нет значения — пустая ячейка
@@ -72,15 +89,15 @@ export function jsonToCSV(jsonData: any, headersMap: any, filename = "data.csv")
         csvRows.push(values.join(";"));
     });
 
-    // 3️⃣ Добавляем BOM для корректной кодировки UTF-8
+    // Добавляем BOM для корректной кодировки UTF-8
     const bom = "\uFEFF"; // BOM для UTF-8
     const csvContent = bom + csvRows.join("\n");
 
-    // 4️⃣ Создаем CSV-файл
+    // Создаем CSV-файл
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
 
-    // 5️⃣ Даем пользователю скачать
+    // Даем пользователю скачать
     const a = document.createElement("a");
     a.href = url;
     a.download = filename;
