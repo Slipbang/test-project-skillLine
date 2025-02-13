@@ -10,7 +10,7 @@ defineProps({
   </button>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .swipe-button {
   width: 44px;
   height: 36px;
