@@ -11,7 +11,7 @@ defineProps({
   </button>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .page-button {
   height: 36px;
   width: 36px;
