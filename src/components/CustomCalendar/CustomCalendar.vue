@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import MonthSelector from "@/components/CustomCalendar/MonthSelector/MonthSelector.vue";
 import Month from "@/components/CustomCalendar/Month/Month.vue";
+import ButtonPrimary from "@/components/ButtonPrimary/ButtonPrimary.vue";
+import ButtonSecondary from "@/components/ButtonSecondary/ButtonSecondary.vue";
 </script>
 
 <template>
@@ -14,10 +16,19 @@ import Month from "@/components/CustomCalendar/Month/Month.vue";
     </div>
 
     <Month />
+
+    <div class="buttons-container">
+      <ButtonSecondary
+          text="Отмена"
+      />
+      <ButtonPrimary
+          text="Сохранить"
+      />
+    </div>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .custom-calendar {
   width: 364px;
   height: 482px;
@@ -41,6 +52,17 @@ import Month from "@/components/CustomCalendar/Month/Month.vue";
 
   .month-selector-container {
     margin: 24px 16px;
+  }
+
+  .buttons-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 15px;
+
+    button {
+      flex-grow: 1;
+    }
   }
 }
 </style>
