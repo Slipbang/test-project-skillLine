@@ -37,7 +37,7 @@ const numbers = Array.from({ length: 11 }).map((_, i) => i);
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .pages-container {
   width: 324px;
   display: flex;
