@@ -23,6 +23,33 @@ export const extractFirstNumbers = (array: number[], skip: number) => {
     return threeNumbers;
 }
 
+export const defineDayClass = (dayNum: number, day: number) => {
+    if (dayNum === 1) {
+        return 'selected-primary-first';
+    }
+    if (dayNum === 28) {
+        return 'selected-primary-last';
+    }
+
+    let className = 'selected';
+
+    switch (day) {
+        case 1: {
+            className += '-first';
+            break;
+        }
+        case 0: {
+            className += '-last';
+            break;
+        }
+        default: {
+            className += '-center';
+        }
+    }
+
+    return className;
+}
+
 export function jsonToCSV(jsonData: any, headersMap: any, filename = "data.csv") {
     if (!jsonData || jsonData.length === 0) {
         console.error("Пустой JSON!");
