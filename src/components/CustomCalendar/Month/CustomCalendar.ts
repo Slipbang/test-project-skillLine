@@ -1,5 +1,6 @@
-export class CustomCalendar {
+import type {IDayItem} from "@/types/types.ts";
 
+export class CustomCalendar {
     _currentDate: Date;
 
     constructor(date: Date) {
@@ -12,9 +13,10 @@ export class CustomCalendar {
 
     set currentDate(date: Date) {
         this._currentDate = date;
+        console.log(this._currentDate)
     }
 
-    get year(): number {
+    get year (): number {
         return this.currentDate.getFullYear();
     }
 
@@ -26,31 +28,32 @@ export class CustomCalendar {
         return {
             daysInMonth: new Date(this.year, this.month + 1, 0).getDate(),
             lastDay: new Date(this.year, this.month + 1, 0).getDay(),
-            month: this.month + 1,
+            month: this.month,
             year: this.year,
         };
     }
 
     get prevMonth() {
-
-        const month = this.month > 0 ? this.month : 12;
-        const year = month === 12 ? this.year - 1 : this.year;
+        const month = this.month > 0 ? this.month - 1 : 11;
+        const year = this.month > 0 ? this.year : this.year - 1;
 
         return {
-            daysInMonth: new Date(year, month, 0).getDate(),
-            lastDay: new Date(year, month, 0).getDay(),
+            daysInMonth: new Date(year, month + 1, 0).getDate(),
+            lastDay: new Date(year, month + 1, 0).getDay(),
             month: month,
             year: year,
         };
     }
 
-    get calendarArray() {
+    get calendarArray(): {prevMonthDays: IDayItem[], currMonthDays: IDayItem[], nextMonthDays: IDayItem[] } {
         const prevMonthDays = Array.from({length: this.prevMonth.lastDay})
             .map(((day) => () => {
                 const curr = day--;
                 return {
                     dayNum: curr,
                     day: new Date(this.prevMonth.year, this.prevMonth.month, curr).getDay(),
+                    month: this.prevMonth.month,
+                    year: this.prevMonth.year,
                 }
             })(this.prevMonth.daysInMonth))
             .reverse();
@@ -61,15 +64,24 @@ export class CustomCalendar {
                 return {
                     dayNum: curr,
                     day: new Date(this.currentMonth.year, this.currentMonth.month, curr).getDay(),
+                    month: this.currentMonth.month,
+                    year: this.currentMonth.year,
                 }
             });
         const nextMonthDays = Array.from({length: (7 - this.currentMonth.lastDay)})
             .map((_, index) => {
                 const curr = index + 1;
 
+                const month = this.month < 11 ? this.month + 1 : 0;
+                const year = this.month < 11 ? this.year : this.year + 1;
+
+                const tmp = new Date(year, month, curr);
+
                 return {
                     dayNum: curr,
-                    day: new Date(this.currentMonth.year + 1, this.currentMonth.month + 1, curr).getDay(),
+                    day: tmp.getDay(),
+                    month: tmp.getMonth(),
+                    year: tmp.getFullYear(),
                 }
             });
 
