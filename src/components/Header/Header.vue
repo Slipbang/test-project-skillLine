@@ -25,7 +25,7 @@ import SquareLogo from '../icons/SquareLogo.vue';
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .tech-header-group-1 {
   background-color: #0E0E10;
   height: 372px;
