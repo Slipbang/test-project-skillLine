@@ -10,7 +10,7 @@ import RightArrowIcon from "@/components/icons/RightArrowIcon.vue";
       <LeftArrowIcon />
     </button>
 
-    <p>Январь 2024</p>
+    <p>Февраль 2025</p>
 
     <button class="svg-button">
       <RightArrowIcon />
@@ -18,7 +18,7 @@ import RightArrowIcon from "@/components/icons/RightArrowIcon.vue";
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .month-selector {
   display: flex;
   align-items: center;
