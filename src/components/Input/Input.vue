@@ -10,7 +10,7 @@
   />
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .custom-input {
   height: 56px;
   background-image: url(../icons/searchIcon.svg);
