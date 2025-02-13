@@ -8,10 +8,8 @@ defineProps({
 
 <template>
   <button class="download-button">
-    <div>
-      <DownloadButtonIcon />
-      <p>{{ text }}</p>
-    </div>
+    <DownloadButtonIcon />
+    {{ text }}
   </button>
 </template>
 
@@ -24,22 +22,17 @@ defineProps({
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  line-height:  21px;
 
-  div {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    svg {
-      margin-right: 10px;
-    }
-
-    p {
-      font-weight: 700;
-      font-size: 16px;
-      line-height:  21px;
-    }
+  svg {
+    margin-right: 10px;
   }
+
 }
 
 .download-button:hover {
