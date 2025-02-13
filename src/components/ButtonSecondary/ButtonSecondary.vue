@@ -10,7 +10,7 @@ defineProps({
   </button>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .button-secondary {
   display: flex;
   height: 53px;
