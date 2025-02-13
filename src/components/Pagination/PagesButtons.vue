@@ -9,7 +9,7 @@ import Pages from "@/components/Pages/Pages.vue";
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .pagination-container {
   display: flex;
   justify-content: space-between;
