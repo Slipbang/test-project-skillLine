@@ -2,17 +2,30 @@
 
 import LeftArrowIcon from "@/components/icons/LeftArrowIcon.vue";
 import RightArrowIcon from "@/components/icons/RightArrowIcon.vue";
+import {useCalendarStore} from "@/stores/calendar.ts";
+import {storeToRefs} from "pinia";
+import {months} from "@/utils/utilsObjects.ts";
+
+const calendarStore = useCalendarStore();
+const {selectedYear, selectedMonth} = storeToRefs(calendarStore);
+
 </script>
 
 <template>
   <div class="month-selector">
-    <button class="svg-button">
+    <button
+        @click="calendarStore.decreaseMonth()"
+        class="svg-button"
+    >
       <LeftArrowIcon />
     </button>
 
-    <p>Февраль 2025</p>
+    <p>{{ months[selectedMonth] }} {{ selectedYear }}</p>
 
-    <button class="svg-button">
+    <button
+        @click="calendarStore.increaseMonth()"
+        class="svg-button"
+    >
       <RightArrowIcon />
     </button>
   </div>
