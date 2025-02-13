@@ -1,37 +1,34 @@
 <script setup lang="ts">
 import DropdownItem from "@/components/DropdownItem/DropdownItem.vue";
+import {useDropdownStore} from "@/stores/dropdown.ts";
+import {storeToRefs} from "pinia";
 
 defineProps({
-  isDropdownOpen: Boolean,
+  isDropdownShown: Boolean,
 })
 
-let buttonText = [10, 20, 30, 40, 50];
-
-const selectValueHandler = (value: number) => {
-  const temp = buttonText.filter(val => val !== value);
-  buttonText = [value, ...temp];
-}
-const resetHandler = () => buttonText.sort((a, b) => a - b);
+const dropdownStore = useDropdownStore();
+const {buttonText} = storeToRefs(dropdownStore)
 </script>
 
 <template>
   <div class="dropdown-wrapper">
     <div
         class="dropdown-container"
-        :class="isDropdownOpen && 'dropdown-opened'"
-        :data-active="isDropdownOpen ? 'active' : 'inactive'"
+        :class="isDropdownShown && 'dropdown-opened'"
+        :data-active="isDropdownShown ? 'active' : 'inactive'"
     >
       <DropdownItem
           v-for="value of buttonText"
           :value="value"
-          :isDropdownOpen="isDropdownOpen"
-          @click="isDropdownOpen ? selectValueHandler(value) : resetHandler()"
+          :isDropdownOpen="isDropdownShown"
+          @click="dropdownStore.selectValueHandler(value)"
       />
     </div>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .dropdown-wrapper {
   width: 85px;
   display: flex;
