@@ -29,6 +29,8 @@ onClickOutside(divRef,(event) => {
   );
 
   if (!clickedInsideException && isCalendarShown.value) {
+    calendarStore.setDateTo(filterDateTo.value);
+    calendarStore.setDateFrom(filterDateFrom.value);
     calendarStore.toggleCalendarVisibility();
   }
 });
