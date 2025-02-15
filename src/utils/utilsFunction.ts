@@ -1,29 +1,46 @@
 import type {IDate, IDayItem, ISupplements} from "@/types/types.ts";
-import {months} from "@/utils/utilsObjects.ts";
+import {comparisonParams, filterMonths} from "@/utils/utilsObjects.ts";
 
-export const defineEducationCategories = (supplements: ISupplements[]) => {
+export const defineEducationCategories = (supplements: ISupplements[]): string[] => {
     const forbidden = ['Не определен',]
+    const educationLevels = new Set<string>();
 
-    return [...supplements.reduce((acc, currentValue) => {
-        const keyWord = currentValue.edu_level.name.split(" ")[0];
-        if (!acc.has(keyWord) && !forbidden.includes(currentValue.edu_level.name)) {
-            acc.add(keyWord);
-        }
-        return acc;
-    }, new Set<string>())]
+    supplements?.forEach(supplement => {
+        supplement?.educational_programs?.forEach((program) => {
+            const keyWord = program?.edu_level?.name?.split(" ")[0];
+            if (!educationLevels.has(keyWord) && !forbidden.includes(program?.edu_level.name) && keyWord) {
+                educationLevels.add(keyWord);
+            }
+        })
+    })
+
+    return [...educationLevels];
 }
 
-export const extractFirstNumbers = (array: number[], skip: number) => {
-    const threeNumbers = [...array].splice(skip, 3);
+export const extractFirstNumbers = (value: number, limit: number) => {
+    if (value <= 2) return [1,2,3];
+    else if (value === limit - 1) return [value - 2,value - 1, value];
+    else if (value === limit) return [value - 1, value]
 
-    return threeNumbers;
+    return [value - 1, value, value + 1];
 }
 
-export const equalityTest = (target: IDayItem, source: IDate) => {
+export const equalityTest = (target: IDayItem, source: IDate, comparison: comparisonParams) => {
     const targetTime = new Date(target.year, target.month + 1, target.dayNum).getTime();
     const sourceTime = new Date(source.year!, source.month! + 1, source.dayNum!).getTime();
 
-    return targetTime === sourceTime;
+    switch (comparison) {
+        case comparisonParams.EQUAL:
+            return targetTime === sourceTime;
+        case comparisonParams.GE:
+            return targetTime >= sourceTime;
+        case comparisonParams.LE:
+            return targetTime <= sourceTime;
+        case comparisonParams.GT:
+            return targetTime > sourceTime;
+        case comparisonParams.LT:
+            return targetTime < sourceTime;
+    }
 }
 
 export const defineDayClass = (item: IDayItem, targetFrom: IDate, targetTo: IDate) => {
@@ -37,10 +54,18 @@ export const defineDayClass = (item: IDayItem, targetFrom: IDate, targetTo: IDat
     }
 
     if (itemDate.getTime() === fromDate.getTime()) {
-        return 'selected-primary-first';
+        let selectedPrimary = 'selected-primary';
+        if (item.day !== 0) {
+            selectedPrimary += '-start'
+        }
+        return selectedPrimary;
     }
     if (itemDate.getTime() === toDate.getTime()) {
-        return 'selected-primary-last';
+        let selectedPrimary = 'selected-primary';
+        if (item.day !== 1) {
+            selectedPrimary += '-end'
+        }
+        return selectedPrimary;
     }
 
     let className = 'selected';
@@ -63,7 +88,7 @@ export const defineDayClass = (item: IDayItem, targetFrom: IDate, targetTo: IDat
 }
 
 export const defineDateText = (date: IDate) => {
-    return `${date.dayNum} ${months[date?.month || 0]} ${date.year}`
+    return `${date.dayNum} ${filterMonths[date?.month || 0]} ${date.year}`
 }
 
 // сменить на xlsx
@@ -94,7 +119,7 @@ export function jsonToCSV(jsonData: any, headersMap: any, filename = "data.csv")
     const csvContent = bom + csvRows.join("\n");
 
     // Создаем CSV-файл
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const blob = new Blob([csvContent], {type: "text/csv;charset=utf-8;"});
     const url = URL.createObjectURL(blob);
 
     // Даем пользователю скачать
