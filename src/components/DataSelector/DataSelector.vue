@@ -1,21 +1,6 @@
 <script setup lang="ts">
-
 import Dropdown from "@/components/Dropdown/Dropdown.vue";
-import {ref} from "vue";
-import {onClickOutside} from "@vueuse/core";
-import {useDropdownStore} from "@/stores/dropdown.ts";
-import {storeToRefs} from "pinia";
 
-const dropdownStore = useDropdownStore();
-
-const dropdownRef = ref<HTMLElement | null>(null);
-const {isDropdownShown} = storeToRefs(dropdownStore)
-
-onClickOutside(dropdownRef,(event) => {
-  if (isDropdownShown.value) {
-    dropdownStore.toggleDropdownVisibility();
-  }
-});
 </script>
 
 <template>
@@ -24,11 +9,7 @@ onClickOutside(dropdownRef,(event) => {
 
     <div class="drop-container">
       <p>Показывать</p>
-      <Dropdown
-          ref="dropdownRef"
-          :isDropdownShown="isDropdownShown"
-          @click="dropdownStore.toggleDropdownVisibility()"
-      />
+      <Dropdown />
     </div>
   </div>
 </template>
