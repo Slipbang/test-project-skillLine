@@ -16,7 +16,7 @@ export class CustomCalendar {
         console.log(this._currentDate)
     }
 
-    get year (): number {
+    get year(): number {
         return this.currentDate.getFullYear();
     }
 
@@ -45,17 +45,18 @@ export class CustomCalendar {
         };
     }
 
-    get calendarArray(): {prevMonthDays: IDayItem[], currMonthDays: IDayItem[], nextMonthDays: IDayItem[] } {
+    get calendarArray(): { prevMonthDays: IDayItem[], currMonthDays: IDayItem[], nextMonthDays: IDayItem[] } {
         const prevMonthDays = Array.from({length: this.prevMonth.lastDay})
-            .map(((day) => () => {
-                const curr = day--;
-                return {
-                    dayNum: curr,
-                    day: new Date(this.prevMonth.year, this.prevMonth.month, curr).getDay(),
-                    month: this.prevMonth.month,
-                    year: this.prevMonth.year,
-                }
-            })(this.prevMonth.daysInMonth))
+            .map(((day) =>
+                () => {
+                    const curr = day--;
+                    return {
+                        dayNum: curr,
+                        day: new Date(this.prevMonth.year, this.prevMonth.month, curr).getDay(),
+                        month: this.prevMonth.month,
+                        year: this.prevMonth.year,
+                    }
+                })(this.prevMonth.daysInMonth))
             .reverse();
         const currMonthDays = Array.from({length: this.currentMonth.daysInMonth})
             .map((_, index) => {
@@ -68,22 +69,25 @@ export class CustomCalendar {
                     year: this.currentMonth.year,
                 }
             });
-        const nextMonthDays = Array.from({length: (7 - this.currentMonth.lastDay)})
-            .map((_, index) => {
-                const curr = index + 1;
+        const nextMonthDays =
+            this.currentMonth.lastDay !== 0
+                ? Array.from({length: (7 - this.currentMonth.lastDay)})
+                    .map((_, index) => {
+                        const curr = index + 1;
 
-                const month = this.month < 11 ? this.month + 1 : 0;
-                const year = this.month < 11 ? this.year : this.year + 1;
+                        const month = this.month < 11 ? this.month + 1 : 0;
+                        const year = this.month < 11 ? this.year : this.year + 1;
 
-                const tmp = new Date(year, month, curr);
+                        const tmp = new Date(year, month, curr);
 
-                return {
-                    dayNum: curr,
-                    day: tmp.getDay(),
-                    month: tmp.getMonth(),
-                    year: tmp.getFullYear(),
-                }
-            });
+                        return {
+                            dayNum: curr,
+                            day: tmp.getDay(),
+                            month: tmp.getMonth(),
+                            year: tmp.getFullYear(),
+                        }
+                    })
+                : [];
 
         return {
             prevMonthDays,
