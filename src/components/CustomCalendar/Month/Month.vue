@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {days} from "@/utils/utilsObjects.ts";
+import {comparisonParams, days} from "@/utils/utilsObjects.ts";
 import {useCalendarStore} from "@/stores/calendar.ts";
 import {storeToRefs} from "pinia";
 import {defineDayClass, equalityTest} from "@/utils/utilsFunction.ts";
@@ -19,17 +19,19 @@ const toggleMouseEnterHandler = (date: IDayItem) => {
     return;
   }
 
-  if (equalityTest(date, dateFrom.value)) {
+  if (equalityTest(date, dateFrom.value, comparisonParams.EQUAL)) {
     isChangingDateFromAvailable.value = !isChangingDateFromAvailable.value;
-    return;
-  }
-  if (equalityTest(date, dateTo.value)) {
+  } else if (equalityTest(date, dateTo.value, comparisonParams.EQUAL)) {
     isChangingDateToAvailable.value = !isChangingDateToAvailable.value;
   }
 }
 
 const movePointerHandler = (date: IDayItem) => {
-  if (!isChangingDateToAvailable.value && !isChangingDateFromAvailable.value) return;
+  if (
+      (!isChangingDateToAvailable.value && !isChangingDateFromAvailable.value)
+      || (isChangingDateToAvailable.value && (equalityTest(date, dateFrom.value, comparisonParams.LE)))
+      || (isChangingDateFromAvailable.value && (equalityTest(date, dateTo.value, comparisonParams.GE)))
+  ) return;
 
   const targetDate = {
     dayNum: date.dayNum,
@@ -108,7 +110,8 @@ const movePointerHandler = (date: IDayItem) => {
 
   .days-nums-wrapper {
     margin-top: 10px;
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
     gap: 8px;
     flex-direction: row;
     align-items: center;
@@ -164,14 +167,18 @@ const movePointerHandler = (date: IDayItem) => {
       }
     }
 
-    .selected-primary-first {
+    .selected-primary {
       background-color: #33D35E;
-      box-shadow: 7px 0 0 0 #C3FCD2;
-    }
 
-    .selected-primary-last {
-      background-color: #33D35E;
-      box-shadow: -7px 0 0 0 #C3FCD2;
+      &-start {
+        @extend .selected-primary;
+        box-shadow: 7px 0 0 0 #C3FCD2;
+      }
+
+      &-end {
+        @extend .selected-primary;
+        box-shadow: -7px 0 0 0 #C3FCD2;
+      }
     }
   }
 }
