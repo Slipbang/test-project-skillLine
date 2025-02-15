@@ -1,14 +1,14 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import type {IDate} from "@/types/types.ts";
-import {CustomCalendar} from "@/components/CustomCalendar/Month/CustomCalendar.ts";
+import {CustomCalendar} from "@/utilsClasses/CustomCalendar.ts";
 
 export const useCalendarStore = defineStore('calendar', () => {
     const isCalendarShown = ref(false);
 
-    const currentDate = new Date();
+    const initialDate = new Date();
 
-    const pastDate = new Date(currentDate);
+    const pastDate = new Date(initialDate);
     pastDate.setDate(pastDate.getDate() - 10);
 
     const dateFrom = ref<IDate>({
@@ -17,15 +17,15 @@ export const useCalendarStore = defineStore('calendar', () => {
         year: pastDate.getFullYear(),
     });
     const dateTo = ref<IDate>({
-        dayNum: currentDate.getDate(),
-        month: currentDate.getMonth(),
-        year: currentDate.getFullYear(),
+        dayNum: initialDate.getDate(),
+        month: initialDate.getMonth(),
+        year: initialDate.getFullYear(),
     });
 
     const calendar = ref<CustomCalendar>(new CustomCalendar(new Date()));
 
-    const selectedMonth = ref<number>(currentDate.getMonth());
-    const selectedYear = ref<number>(currentDate.getFullYear());
+    const selectedMonth = ref<number>(initialDate.getMonth());
+    const selectedYear = ref<number>(initialDate.getFullYear());
 
     const increaseMonth = () => {
         if (selectedMonth.value < 11) {
