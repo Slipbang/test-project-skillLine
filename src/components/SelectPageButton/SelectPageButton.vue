@@ -19,9 +19,12 @@ defineProps({
   border: none;
   background-color: var(--btn-bgc);
   cursor: pointer;
-  margin: 0 1px;
+  margin: 0 2px;
   font-weight: 400;
   font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
 }
 
