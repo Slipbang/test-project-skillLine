@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import Pages from "@/components/Pages/Pages.vue";
+import Pages from "@/components/Pagination/Pages/Pages.vue";
 </script>
 
 <template>
