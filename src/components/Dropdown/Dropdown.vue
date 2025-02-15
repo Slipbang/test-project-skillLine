@@ -1,18 +1,47 @@
 <script setup lang="ts">
 import DropdownItem from "@/components/Dropdown/DropdownItem/DropdownItem.vue";
-import {useDropdownStore} from "@/stores/dropdown.ts";
+import {ref} from "vue";
+import {onClickOutside} from "@vueuse/core";
+import {useSchoolsApiStore} from "@/stores/schoolsApi.ts";
 import {storeToRefs} from "pinia";
 
-defineProps({
-  isDropdownShown: Boolean,
-})
+const schoolsApiStore = useSchoolsApiStore();
+const {count} = storeToRefs(schoolsApiStore);
+const dropdownRef = ref<HTMLElement | null>(null);
+const isDropdownShown = ref(false);
+const buttonText = ref<number[]>([10, 20, 30, 40, 50]);
 
-const dropdownStore = useDropdownStore();
-const {buttonText} = storeToRefs(dropdownStore)
+function toggleDropdownVisibility() {
+  if (!isDropdownShown.value) {
+    buttonText.value.sort((a, b) => a - b)
+  }
+  isDropdownShown.value = !isDropdownShown.value;
+}
+
+const sortButtonsText = (value: number) => {
+  const temp = buttonText.value.filter(val => val !== value);
+  buttonText.value = [value, ...temp];
+}
+
+const selectValueHandler = (value: number) => {
+  schoolsApiStore.selectCount(value);
+  sortButtonsText(value);
+}
+
+onClickOutside(dropdownRef,(event) => {
+  if (isDropdownShown.value) {
+    sortButtonsText(count.value);
+    toggleDropdownVisibility();
+  }
+});
 </script>
 
 <template>
-  <div class="dropdown-wrapper">
+  <div
+      ref="dropdownRef"
+      class="dropdown-wrapper"
+      @click="toggleDropdownVisibility()"
+  >
     <div
         class="dropdown-container"
         :class="isDropdownShown && 'dropdown-opened'"
@@ -22,7 +51,7 @@ const {buttonText} = storeToRefs(dropdownStore)
           v-for="value of buttonText"
           :value="value"
           :isDropdownOpen="isDropdownShown"
-          @click="dropdownStore.selectValueHandler(value)"
+          @click="selectValueHandler(value)"
       />
     </div>
   </div>
