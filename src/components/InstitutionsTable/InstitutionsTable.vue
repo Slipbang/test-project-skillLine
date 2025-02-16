@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import Input from "@/components/Input/Input.vue";
+
 import Filters from "@/components/Filters/Filters.vue";
 import Table from "@/components/Table/Table.vue";
-import {jsonToCSV} from "@/utils/utilsFunction.ts";
+//import {jsonToCSV} from "@/utils/utilsFunction.ts";
 import DataSelector from "@/components/DataSelector/DataSelector.vue";
 import PagesButtons from "@/components/Pagination/PagesButtons.vue";
 
@@ -11,9 +11,14 @@ import ButtonAccent from "@/components/ButtonAccent/ButtonAccent.vue";
 
 import { storeToRefs } from "pinia";
 import {useCalendarStore} from "@/stores/calendar.ts";
+import {useFiltersStore} from "@/stores/filterStore.ts";
+import CustomInput from "@/components/CustomInput/CustomInput.vue";
 
 const calendarStore = useCalendarStore();
 const {isCalendarShown} = storeToRefs(calendarStore);
+const filterStore = useFiltersStore();
+const {filterInputValue} = storeToRefs(filterStore);
+
 //jsonToCSV(jsonData, headersMap);
 
 </script>
@@ -32,7 +37,9 @@ const {isCalendarShown} = storeToRefs(calendarStore);
        <h4>Таблица учреждений</h4>
 
        <div class="controls">
-         <Input />
+         <CustomInput
+             v-model="filterInputValue"
+         />
          <ButtonAccent text="Скачать" />
        </div>
      </div>
@@ -66,6 +73,7 @@ const {isCalendarShown} = storeToRefs(calendarStore);
     position: absolute;
     top: 520px;
     left: 275px;
+    z-index: 9999;
   }
 
   .block {
