@@ -2,13 +2,13 @@
 import CustomCheckbox from "@/components/CustomCheckbox/CustomCheckbox.vue";
 import {defineEducationCategories} from "@/utils/utilsFunction.ts";
 import {useSchoolsApiStore} from "@/stores/schoolsApi.ts";
-import {onMounted, watch} from "vue";
+import {onMounted, reactive, watch} from "vue";
 import {storeToRefs} from "pinia";
 import {useDebounceFn} from "@vueuse/core";
 import TableSortButton from "@/components/TableSortButton/TableSortButton.vue";
 import {useSortingStore} from "@/stores/sortStore.ts";
-import {sortData} from "@/utilsClasses/utilsSortFunctions.ts";
-import {filterByNames} from "@/utilsClasses/utilsFilterFunctions.ts";
+import {sortData} from "@/utils/utilsSortFunctions.ts";
+import {filterByDate, filterByEduType, filterByNames, filterByStatus} from "@/utils/utilsFilterFunctions.ts";
 import {useFiltersStore} from "@/stores/filterStore.ts";
 
 const schoolsApiStore = useSchoolsApiStore();
@@ -23,12 +23,22 @@ const {
 } = storeToRefs(sortingStore);
 
 const filterStore = useFiltersStore();
-const {filterInputValue} = storeToRefs(filterStore);
+const {
+  filterInputValue,
+  filterDateFrom,
+  filterDateTo,
+  educationCategory,
+  institutionStatus,
+  selectedFederalDistrict,
+  selectedRegion
+} = storeToRefs(filterStore);
 
-const fetchDataDebounced = useDebounceFn((page: number, count: number) => {
+const fetchDataDebounced = useDebounceFn((page: number, count: number, federal_district_id: number, region_id: number) => {
   schoolsApiStore.fetchData({
     page,
-    count
+    count,
+    federal_district_id,
+    region_id,
   });
 }, 500);
 
@@ -41,16 +51,22 @@ onMounted(() => {
 
 const {schoolItems} = storeToRefs(schoolsApiStore);
 
+const flags = reactive({
+      eduLvlIsAsc: educationLevelIsAscending,
+      addressIsAsc: addressIsAscending,
+      nameIsAsc: nameIsAscending,
+      regionIsAsc: regionIsAscending
+})
 
 const pipe =
     <T>(...fns: ((args: Partial<T>) => Partial<T>)[]) =>
         (initialArgs: Partial<T>): T =>
             fns.reduce((acc, fn) => ({ ...acc, ...fn(acc) }), initialArgs) as T;
 
-watch([page, count], ([newPage, newCount]) => {
-  if (!newPage && !newCount) return;
+watch([page, count, selectedFederalDistrict, selectedRegion], ([newPage, newCount, newFederalDistrict, newsSelectedRegion]) => {
+  if (!newPage && !newCount && !newFederalDistrict) return;
 
-  fetchDataDebounced(newPage, newCount);
+  fetchDataDebounced(newPage, newCount, newFederalDistrict.federal_district_id, newsSelectedRegion.region_id);
 })
 
 </script>
@@ -112,16 +128,17 @@ watch([page, count], ([newPage, newCount]) => {
     <tr v-for="item in pipe(
         sortData,
         filterByNames,
+        filterByDate,
+        filterByEduType,
+        filterByStatus
     )({
-    schoolItems: schoolItems,
-     flags: {
-      eduLvlIsAsc: educationLevelIsAscending,
-      addressIsAsc: addressIsAscending,
-      nameIsAsc: nameIsAscending,
-      regionIsAsc: regionIsAscending
-    },
-    filterValue: filterInputValue
-
+    schoolItems,
+    flags,
+    filterValue: filterInputValue,
+    filterDateFrom,
+    filterDateTo,
+    eduCategory: educationCategory,
+    status: institutionStatus,
     }).schoolItems"
         :key="item.uuid">
       <td>
@@ -130,11 +147,11 @@ watch([page, count], ([newPage, newCount]) => {
           {{ item.edu_org.region.name }}
         </div>
       </td>
-      <td>{{ item.edu_org.short_name ?? item.edu_org.full_name }}</td>
-      <td>{{ item.edu_org.contact_info.post_address }}</td>
+      <td>{{ item?.edu_org?.short_name ?? item?.edu_org?.full_name ?? 'Не указано'}}</td>
+      <td>{{ item?.edu_org?.contact_info?.post_address ?? 'Не указан' }}</td>
       <td>
         <div class="key-container">
-          <div class="category" v-for="keyWord in defineEducationCategories(item.supplements)" key="keyWord">
+          <div class="category" v-for="keyWord in defineEducationCategories(item.supplements)" :key="keyWord">
             <p>{{ keyWord }}</p>
           </div>
         </div>
@@ -209,7 +226,11 @@ watch([page, count], ([newPage, newCount]) => {
         }
       }
     }
-
+    .key-container:empty:after {
+      content: 'Не указан';
+      color: #55555C;
+      padding: 5px;
+    }
   }
 
   td:last-child {
