@@ -1,20 +1,39 @@
-import type {IDate, IDayItem, ISupplements} from "@/types/types.ts";
+import type {IDate, IDayItem, IRegionsResponse, ISupplements} from "@/types/types.ts";
 import {comparisonParams, filterMonths} from "@/utils/utilsObjects.ts";
+import type {Ref} from "vue";
+import {onClickOutside} from "@vueuse/core";
+
+const forbidden = ['Не определен'];
+const special = ['бакалавриат', 'специалитет' ,'магистратура',]
+const keyWords = [...special, 'послевузовское', 'высшее' , 'среднее', 'общее', 'дошкольное'];
 
 export const defineEducationCategories = (supplements: ISupplements[]): string[] => {
-    const forbidden = ['Не определен',]
-    const educationLevels = new Set<string>();
+
+    const educationCategories = new Set<string>();
 
     supplements?.forEach(supplement => {
         supplement?.educational_programs?.forEach((program) => {
-            const keyWord = program?.edu_level?.name?.split(" ")[0];
-            if (!educationLevels.has(keyWord) && !forbidden.includes(program?.edu_level.name) && keyWord) {
-                educationLevels.add(keyWord);
+
+            if (!forbidden.includes(program?.edu_level.name) && !educationCategories.has(program?.edu_level?.name)) {
+                educationCategories.add(program?.edu_level.name);
             }
         })
     })
 
-    return [...educationLevels];
+    const tmpEduCategories = new Set([...educationCategories].map(category => {
+        for (let keyWord of keyWords) {
+            if(category?.toLowerCase()?.includes(keyWord)) {
+                if (special.includes(keyWord)) {
+                    return [keyWord, 'высшее']
+                }
+                return keyWord;
+            }
+        }
+        return ''
+    }).filter(Boolean).flat())
+
+
+    return [...tmpEduCategories];
 }
 
 export const extractFirstNumbers = (value: number, limit: number) => {
@@ -49,10 +68,6 @@ export const defineDayClass = (item: IDayItem, targetFrom: IDate, targetTo: IDat
     const fromDate = new Date(targetFrom.year!, targetFrom.month!, targetFrom.dayNum!);
     const toDate = new Date(targetTo.year!, targetTo.month!, targetTo.dayNum!);
 
-    if (itemDate < fromDate || itemDate > toDate) {
-        return '';
-    }
-
     if (itemDate.getTime() === fromDate.getTime()) {
         let selectedPrimary = 'selected-primary';
         if (item.day !== 0) {
@@ -66,6 +81,10 @@ export const defineDayClass = (item: IDayItem, targetFrom: IDate, targetTo: IDat
             selectedPrimary += '-end'
         }
         return selectedPrimary;
+    }
+
+    if (itemDate < fromDate || itemDate > toDate) {
+        return '';
     }
 
     let className = 'selected';
@@ -90,6 +109,26 @@ export const defineDayClass = (item: IDayItem, targetFrom: IDate, targetTo: IDat
 export const defineDateText = (date: IDate) => {
     return `${date.dayNum} ${filterMonths[date?.month || 0]} ${date.year}`
 }
+
+export const filterRegions = (regions: IRegionsResponse, value: string) => {
+    if (!value) return regions;
+
+    return regions.filter(region => {
+        return region.name.toLowerCase().includes(value.toLowerCase());
+    })
+}
+
+export const handleClickOutside = (ref: Ref<HTMLElement | null>, isOpened: Ref<boolean>, toggleFn: () => void, exceptions: string[] = []) => {
+    onClickOutside(ref, (event) => {
+        const clickedInsideException = exceptions.some(selector =>
+            (event.target as HTMLElement).closest(selector)
+        );
+
+        if (!clickedInsideException && isOpened.value) {
+            toggleFn();
+        }
+    });
+};
 
 // сменить на xlsx
 export function jsonToCSV(jsonData: any, headersMap: any, filename = "data.csv") {
