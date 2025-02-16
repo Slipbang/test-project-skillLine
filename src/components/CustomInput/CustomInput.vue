@@ -1,15 +1,10 @@
 <script setup lang="ts">
-import {useFiltersStore} from "@/stores/filterStore.ts";
-import {storeToRefs} from "pinia";
-
-const filterStore = useFiltersStore();
-const {filterInputValue} = storeToRefs(filterStore);
-
+const inputValue = defineModel<string>();
 </script>
 
 <template>
   <input
-      v-model="filterInputValue"
+      v-model="inputValue"
       class="custom-input"
       type="text"
       placeholder="Поиск"
@@ -18,6 +13,7 @@ const {filterInputValue} = storeToRefs(filterStore);
 
 <style scoped lang="scss">
 .custom-input {
+  box-sizing: border-box;
   height: 56px;
   background-image: url(../icons/searchIcon.svg);
   background-repeat: no-repeat;
