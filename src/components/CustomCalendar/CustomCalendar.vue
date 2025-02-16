@@ -44,6 +44,7 @@ const saveChangesHandler = () => {
           text="Отмена"
       />
       <ButtonPrimary
+          :isDisabled="!dateTo.year || !dateFrom.year"
           @click="saveChangesHandler()"
           text="Сохранить"
       />
