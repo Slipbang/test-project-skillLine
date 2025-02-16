@@ -22,6 +22,10 @@ export interface PipeParams {
     schoolItems: ISchoolsItem[];
     flags: ICompareFlags;
     filterValue: string;
+    filterDateFrom: IDate;
+    filterDateTo: IDate;
+    eduCategory: string;
+    status: string;
 }
 
 export interface ISupplements  {
@@ -129,13 +133,33 @@ export type ISchoolsItem = {
     decisions: any[];
 };
 
-export interface serverResponse {
+export interface ISchoolApiResponse {
+    "pages_count": number,
+    "page": number,
+    "total_count": number,
+    "list": ISchoolsItem[]
+}
+
+interface IFederalDistricts {
+    id: number;
+    name: string;
+    short_name: string;
+    code: string;
+}
+
+export type IFederalDistrictsResponse = IFederalDistricts[];
+
+export interface IRegions {
+    id: number;
+    name: string;
+}
+
+export type IRegionsResponse = IRegions[];
+
+export interface IServerResponse<T>{
     "status": boolean,
     "message": string,
-    "data": {
-        "pages_count": number,
-        "page": number,
-        "total_count": number,
-        "list": ISchoolsItem[]
-    }
+    "data": T;
 }
+
+export type TSelectItem = Partial<IFederalDistricts>
