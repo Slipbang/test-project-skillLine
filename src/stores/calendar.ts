@@ -12,14 +12,14 @@ export const useCalendarStore = defineStore('calendar', () => {
     pastDate.setDate(pastDate.getDate() - 10);
 
     const dateFrom = ref<IDate>({
-        dayNum: pastDate.getDate(),
-        month: pastDate.getMonth(),
-        year: pastDate.getFullYear(),
+        dayNum: null,
+        month: null,
+        year: null,
     });
     const dateTo = ref<IDate>({
-        dayNum: initialDate.getDate(),
-        month: initialDate.getMonth(),
-        year: initialDate.getFullYear(),
+        dayNum: null,
+        month: null,
+        year: null,
     });
 
     const calendar = ref<CustomCalendar>(new CustomCalendar(new Date()));
