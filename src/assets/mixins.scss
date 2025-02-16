@@ -1,0 +1,46 @@
+@mixin scroll-style {
+  ::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #93939B;
+  }
+
+  ::-webkit-scrollbar-button:start {
+    margin-top: 50px; /* Смещаем вниз */
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #93939B #f1f1f1;
+  }
+}
+
+@mixin round-button {
+  width: 26px;
+  height: 26px;
+  background-color: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9990;
+  border: none;
+
+  &:hover {
+    background-color: #D3D3DE;
+    filter: drop-shadow(1px 1px 3px gray);
+  }
+
+  &:active{
+    filter: drop-shadow(1px 1px 1px gray);
+  }
+}
