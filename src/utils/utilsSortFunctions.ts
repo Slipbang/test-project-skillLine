@@ -9,13 +9,14 @@ const sortStringComparisonHelper = (a: string | null, b: string | null, flag: bo
 }
 
 export const educationLvl = {
-    "Дошкольное": 1,
-    'Начальное': 2,
-    'Основное': 3,
-    'Среднее': 4,
-    'Послевузовское': 5,
-    'Профессиональное': 6,
-    'Высшее': 7,
+    "дошкольное": 1,
+    'общее': 2,
+    'среднее': 3,
+    'высшее': 4,
+    'бакалавриат': 5,
+    'специалитет': 6,
+    'магистратура': 7,
+    'послевузовское': 8,
 }
 
 const defineMaxEducationLevelHelper = (educationItems: string[]): number => {
