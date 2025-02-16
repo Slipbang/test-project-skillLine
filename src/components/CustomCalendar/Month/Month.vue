@@ -7,7 +7,7 @@ import {ref} from "vue";
 import type {IDayItem} from "@/types/types.ts";
 
 const calendarStore = useCalendarStore();
-const {dateTo, dateFrom, selectedMonth, selectedYear, calendar} = storeToRefs(calendarStore);
+const {dateTo, dateFrom, calendar} = storeToRefs(calendarStore);
 
 const isChangingDateFromAvailable = ref(false);
 const isChangingDateToAvailable = ref(false);
@@ -16,6 +16,18 @@ const toggleMouseEnterHandler = (date: IDayItem) => {
   if (isChangingDateFromAvailable.value || isChangingDateToAvailable.value) {
     isChangingDateToAvailable.value = false;
     isChangingDateFromAvailable.value = false;
+    return;
+  }
+
+  const targetDate = {
+    dayNum: date.dayNum,
+    month: date.month,
+    year: date.year,
+  }
+
+  if (!dateTo.value.year) {
+    calendarStore.setDateTo(targetDate);
+    isChangingDateFromAvailable.value = true;
     return;
   }
 
@@ -41,9 +53,7 @@ const movePointerHandler = (date: IDayItem) => {
 
   if (isChangingDateToAvailable.value) {
     calendarStore.setDateTo(targetDate);
-  }
-
-  if (isChangingDateFromAvailable.value) {
+  } else if (isChangingDateFromAvailable.value) {
     calendarStore.setDateFrom(targetDate);
   }
 }
