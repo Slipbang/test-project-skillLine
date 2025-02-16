@@ -83,6 +83,7 @@ onClickOutside(dropdownRef,(event) => {
   border-radius: 7px 7px;
   overflow: hidden;
   transform: var(--dd-transform);
+  z-index: 9999;
 }
 
 .dropdown-container:hover {
