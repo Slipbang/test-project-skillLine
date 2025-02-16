@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import axios from "axios";
-import type {ISchoolsItem, serverResponse} from "@/types/types.ts";
+import type {ISchoolApiResponse, ISchoolsItem, IServerResponse} from "@/types/types.ts";
 
 interface IInitialState {
     schoolItems: ISchoolsItem[];
@@ -19,7 +19,7 @@ interface IFetchDataParams {
     updated_at?: number
 }
 
-export const useSchoolsApiStore = defineStore("data", {
+export const useSchoolsApiStore = defineStore("schools", {
     state: (): IInitialState => ({
         schoolItems: [],
         pages_count: 10,
@@ -32,17 +32,18 @@ export const useSchoolsApiStore = defineStore("data", {
         async fetchData({page, count, federal_district_id, region_id, updated_at}: IFetchDataParams): Promise<void> {
             this.loading = true;
             this.error = null;
+            this.schoolItems = [];
 
             const queryParams = new URLSearchParams({
                 page: page.toString(),
                 count: count.toString(),
             });
-            if (federal_district_id) queryParams.append("federal_district_id", federal_district_id.toString());
-            if (region_id) queryParams.append("region_id", region_id.toString());
+            if (federal_district_id && federal_district_id >= 1) queryParams.append("federal_district_id", federal_district_id.toString());
+            if (region_id && region_id >= 1) queryParams.append("region_id", region_id.toString());
             if (updated_at) queryParams.append("updated_at", updated_at.toString());
 
             try {
-                const response = await axios.get<serverResponse>(`https://schooldb.skillline.ru/api/schools?${queryParams}`);
+                const response = await axios.get<IServerResponse<ISchoolApiResponse>>(`https://schooldb.skillline.ru/api/schools?${queryParams}`);
                 this.schoolItems = response.data.data.list;
                 this.pages_count = response.data.data.pages_count;
             } catch (err) {
