@@ -1,11 +1,14 @@
 <script setup lang="ts">
 defineProps({
+  isDisabled: Boolean,
   text: String,
 })
 </script>
 
 <template>
-  <button class="button-primary">
+  <button
+      :disabled="isDisabled"
+      class="button-primary">
     {{text}}
   </button>
 </template>
@@ -27,12 +30,17 @@ defineProps({
   transition: background-color 0.3s ease-out, color 0.3s ease-out;
 }
 
-.button-primary:hover {
+.button-primary:disabled {
+  background-color: #93939B;
+  color: black;
+}
+
+.button-primary:hover:not(:disabled) {
   background-color: #24C14E;
   color: #0E0E10;
 }
 
-.button-primary:active {
+.button-primary:active:not(:disabled) {
   background-color: #16B240;
   color: #0E0E10;
 }
