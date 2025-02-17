@@ -155,28 +155,37 @@ const regionFilterInputValue = ref<string>('')
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 10px;
-  z-index: 9997;
+  z-index: 9993;
   @include mixins.scroll-style;
 
-  .filter-wrapper {
-    flex: 1;
-    width: 100%;
-    height: 56px;
-    min-width: 126px;
-    position: relative;
-    z-index: 9997;
-    flex-wrap: wrap;
+}
 
-    input {
-      box-sizing: border-box;
-      width: calc(100% - 10px);
-      margin: 1px;
-      border: none;
-      border-radius: 8px 0 0 0;
-      position: absolute;
-      z-index: 9998;
-    }
+.filter-wrapper {
+  flex: 1;
+  width: 100%;
+  height: 56px;
+  min-width: 156px;
+  position: relative;
+  z-index: 9995;
+  flex-wrap: wrap;
+
+  input {
+    box-sizing: border-box;
+    width: calc(100% - 10px);
+    margin: 1px;
+    border: none;
+    border-radius: 8px 0 0 0;
+    position: absolute;
+    z-index: 9999;
   }
 }
 
+.filter-wrapper:has(p) {
+  z-index: 9994;
+  transition: z-index 0.6s ease-out;
+}
+
+.filter-wrapper:not(:has(p)){
+  z-index: 9997;
+}
 </style>
