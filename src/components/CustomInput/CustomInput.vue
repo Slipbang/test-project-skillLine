@@ -1,9 +1,16 @@
 <script setup lang="ts">
 const inputValue = defineModel<string>();
+
+interface Props {
+  text: string;
+}
+
+defineProps<Props>()
 </script>
 
 <template>
   <input
+      :title="text"
       v-model="inputValue"
       class="custom-input"
       type="text"
