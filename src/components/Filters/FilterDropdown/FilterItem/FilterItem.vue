@@ -26,6 +26,7 @@ defineProps<Props>()
   transition: all 0.3s ease-out;
   overflow: hidden;
   text-overflow: ellipsis;
+  z-index: 9997;
 
   &-open {
     @extend .filter-item;
