@@ -73,22 +73,23 @@ const {
 
 const regionFilterInputValue = ref<string>('')
 
-const title = "Выберите диапазон обновления данных об учебном заведении";
 </script>
 
 <template>
   <div class="filters">
     <div class="filter-wrapper">
       <Filter
-          ref="calendarRef" :title="title"
+          ref="calendarRef"
+          title="Выберите диапазон обновления данных об учебном заведении"
           @click="calendarStore.toggleCalendarVisibility()"
-          :text="filterDateFrom?.year ? `${defineDateText(filterDateFrom)} - ${defineDateText(filterDateTo)}` : title"
+          :text="filterDateFrom?.year ? `${defineDateText(filterDateFrom)} - ${defineDateText(filterDateTo)}` : 'Все даты'"
           :icon="CalendarIcon"
       />
     </div>
     <div class="filter-wrapper">
       <Filter
           ref="eduLvlRef"
+          title="Выберите тип учебного заведения"
           :mapItems="educationCategoriesNames"
           :text="educationCategory"
           :icon="ArrowDownIcon"
@@ -100,6 +101,7 @@ const title = "Выберите диапазон обновления данны
 
     <div class="filter-wrapper">
       <Filter
+          title="выберите статус учебного заведения"
           ref="statusRef"
           :mapItems="statuses"
           :isOpened="isStatusFilterOpened"
@@ -112,6 +114,7 @@ const title = "Выберите диапазон обновления данны
 
     <div class="filter-wrapper">
       <Filter
+          title="Выберите федеральный округ"
           ref="federalDistrictRef"
           :mapItems="federalDistricts"
           :isOpened="isFederalDistrictFilterOpened"
@@ -124,11 +127,13 @@ const title = "Выберите диапазон обновления данны
 
     <div class="filter-wrapper">
       <CustomInput
+          text="Фильтрация регионов"
           @click="$event.stopPropagation()"
           v-if="isRegionRegionsFilterOpened"
           v-model="regionFilterInputValue"
       />
       <Filter
+          title="Выберите регион"
           ref="regionsRef"
           :mapItems="filterRegions(regions, regionFilterInputValue)"
           :isOpened="isRegionRegionsFilterOpened"
@@ -142,15 +147,21 @@ const title = "Выберите диапазон обновления данны
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/mixins.scss";
+
 .filters {
-  height: 56px;
+  min-height: 56px;
   display: flex;
   justify-content: space-between;
   gap: 10px;
+  z-index: 9997;
+  @include mixins.scroll-style;
 
   .filter-wrapper {
     flex: 1;
     position: relative;
+    z-index: 9997;
+    flex-wrap: wrap;
 
     input {
       box-sizing: border-box;
@@ -162,30 +173,6 @@ const title = "Выберите диапазон обновления данны
       z-index: 9998;
     }
   }
-
-  ::-webkit-scrollbar {
-    width: 3px;
-    height: 3px;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background-color: transparent;
-    border-radius: 3px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: #93939B;
-  }
-
-  ::-webkit-scrollbar-button:start {
-    margin-top: 50px; /* Смещаем вниз */
-  }
-
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: #93939B #f1f1f1;
-  }
 }
-</style>
 
-//:inputValue="regionFilterInputValue"
+</style>
