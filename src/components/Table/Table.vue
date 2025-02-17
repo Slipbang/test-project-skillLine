@@ -63,10 +63,14 @@ const flags = reactive({
       regionIsAsc: regionIsAscending
 })
 
-watch([page, count, selectedFederalDistrict, selectedRegion], ([newPage, newCount, newFederalDistrict, newsSelectedRegion]) => {
-  if (!newPage && !newCount && !newFederalDistrict) return;
 
-  fetchDataDebounced(newPage, newCount, newFederalDistrict.federal_district_id, newsSelectedRegion.region_id);
+const federal_district_id = computed(() => selectedFederalDistrict?.value?.federal_district_id);
+const region_id = computed(() => selectedRegion?.value?.region_id);
+
+watch([page, count, federal_district_id, region_id], ([newPage, newCount, newFederalDistrict, newsSelectedRegion]) => {
+  if (!newPage && !newCount && !newFederalDistrict && !newsSelectedRegion) return;
+
+  fetchDataDebounced(newPage, newCount, newFederalDistrict, newsSelectedRegion);
 })
 
 const defineCurrentItemsValue = ({schoolItems}: Partial<PipeParams>): Partial<PipeParams> => {
@@ -157,7 +161,8 @@ const isSchoolItemAdded = (uuid: string) => {
     </thead>
     <tbody>
     <tr v-for="item in filteredItems"
-        :key="item.uuid">
+        :key="item.uuid"
+    >
       <td>
         <div class="region-container">
           <CustomCheckbox
@@ -228,36 +233,6 @@ const isSchoolItemAdded = (uuid: string) => {
     font-weight: 400;
     border-bottom: 1px solid #D3D3DE;
 
-    .region-container {
-      display: flex;
-      align-items: center;
-    }
-
-    .key-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-
-      .category {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 24px;
-        padding: 0 5px;
-        border-radius: 8px;
-        border: 1px solid #0E0E101A;
-
-        p {
-          font-size: 12px;
-          line-height: 15px;
-        }
-      }
-    }
-    .key-container:empty:after {
-      content: 'Не указан';
-      color: #55555C;
-      padding: 5px;
-    }
   }
 
   td:last-child {
@@ -266,6 +241,37 @@ const isSchoolItemAdded = (uuid: string) => {
 
   td:not(:last-child) {
     width: 26.00%;
+  }
+}
+
+.region-container {
+  display: flex;
+  align-items: center;
+}
+
+.key-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.key-container:empty:after {
+  content: 'Не указан';
+  color: #55555C;
+  padding: 5px;
+}
+
+.category {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  padding: 0 5px;
+  border-radius: 8px;
+  border: 1px solid #0E0E101A;
+
+  p {
+    font-size: 12px;
+    line-height: 15px;
   }
 }
 </style>
