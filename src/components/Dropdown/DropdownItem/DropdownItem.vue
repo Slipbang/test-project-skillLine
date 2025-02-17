@@ -8,8 +8,7 @@ defineProps({
 
 <template>
   <div
-      class="dropdown-item"
-      :class="isDropdownOpen ? 'opened' : 'closed'"
+      :class="isDropdownOpen ? 'dropdown-item-opened' : 'dropdown-item-closed'"
   >
     {{value}}
     <ArrowDownIcon
@@ -29,14 +28,18 @@ defineProps({
   border: 1px solid transparent;
   transition: background-color 0.3s ease-out, border 0.3s ease-out;
   cursor: pointer;
-}
 
-.opened {
-  background-color: #E4E4EE;
-}
-.closed {
-  border: 1px solid #D3D3DE;
-  justify-content: space-between;
-  padding: 0 12px;
+  &-opened {
+    @extend .dropdown-item;
+    background-color: #E4E4EE;
+  }
+
+  &-closed {
+    @extend .dropdown-item;
+
+    border: 1px solid #D3D3DE;
+    justify-content: space-between;
+    padding: 0 12px;
+  }
 }
 </style>
