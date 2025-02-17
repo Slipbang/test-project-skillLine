@@ -55,9 +55,20 @@ export const useCalendarStore = defineStore('calendar', () => {
         dateTo.value = date;
     }
 
-    function toggleCalendarVisibility() {
+    const toggleCalendarVisibility = ()=> {
         isCalendarShown.value = !isCalendarShown.value;
     }
+
+    const resetCalendarDates = () => {
+        const resetValue = {
+            dayNum: null,
+            month: null,
+            year: null,
+        };
+        dateTo.value = {...resetValue};
+        dateFrom.value = {...resetValue}
+    }
+
     return {
         isCalendarShown,
         dateFrom,
@@ -65,6 +76,7 @@ export const useCalendarStore = defineStore('calendar', () => {
         selectedMonth,
         selectedYear,
         calendar,
+        resetCalendarDates,
         increaseMonth,
         decreaseMonth,
         toggleCalendarVisibility,
