@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import CustomCheckbox from "@/components/CustomCheckbox/CustomCheckbox.vue";
-import {defineEducationCategories} from "@/utils/utilsFunction.ts";
+import {defineEducationCategories, pipe} from "@/utils/utilsFunction.ts";
 import {useSchoolsApiStore} from "@/stores/schoolsApi.ts";
-import {onMounted, reactive, watch} from "vue";
+import {computed, onMounted, reactive, watch} from "vue";
 import {storeToRefs} from "pinia";
 import {useDebounceFn} from "@vueuse/core";
 import TableSortButton from "@/components/TableSortButton/TableSortButton.vue";
@@ -10,6 +10,8 @@ import {useSortingStore} from "@/stores/sortStore.ts";
 import {sortData} from "@/utils/utilsSortFunctions.ts";
 import {filterByDate, filterByEduType, filterByNames, filterByStatus} from "@/utils/utilsFilterFunctions.ts";
 import {useFiltersStore} from "@/stores/filterStore.ts";
+import {useXLSXStore} from "@/stores/xlsxStore.ts";
+import type {PipeParams} from "@/types/types.ts";
 
 const schoolsApiStore = useSchoolsApiStore();
 const {page, count} = storeToRefs(schoolsApiStore);
@@ -32,6 +34,9 @@ const {
   selectedFederalDistrict,
   selectedRegion
 } = storeToRefs(filterStore);
+
+const xlsxStore = useXLSXStore();
+const {schoolItemsUuids} = storeToRefs(xlsxStore);
 
 const fetchDataDebounced = useDebounceFn((page: number, count: number, federal_district_id: number, region_id: number) => {
   schoolsApiStore.fetchData({
@@ -58,17 +63,40 @@ const flags = reactive({
       regionIsAsc: regionIsAscending
 })
 
-const pipe =
-    <T>(...fns: ((args: Partial<T>) => Partial<T>)[]) =>
-        (initialArgs: Partial<T>): T =>
-            fns.reduce((acc, fn) => ({ ...acc, ...fn(acc) }), initialArgs) as T;
-
 watch([page, count, selectedFederalDistrict, selectedRegion], ([newPage, newCount, newFederalDistrict, newsSelectedRegion]) => {
   if (!newPage && !newCount && !newFederalDistrict) return;
 
   fetchDataDebounced(newPage, newCount, newFederalDistrict.federal_district_id, newsSelectedRegion.region_id);
 })
 
+const defineCurrentItemsValue = ({schoolItems}: Partial<PipeParams>): Partial<PipeParams> => {
+  filterStore.setCurrentSchoolItemValue(schoolItems?.length || 0);
+
+  return {schoolItems}
+}
+
+const filteredItems = computed(() =>
+    pipe(
+        sortData,
+        filterByNames,
+        filterByDate,
+        filterByEduType,
+        filterByStatus,
+        defineCurrentItemsValue,
+    )({
+      schoolItems: schoolItems.value,
+      flags,
+      filterValue: filterInputValue.value,
+      filterDateFrom: filterDateFrom.value,
+      filterDateTo: filterDateTo.value,
+      eduCategory: educationCategory.value,
+      status: institutionStatus.value
+    }).schoolItems
+);
+
+const isSchoolItemAdded = (uuid: string) => {
+  return schoolItemsUuids.value.includes(uuid);
+}
 </script>
 
 <template>
@@ -78,7 +106,10 @@ watch([page, count, selectedFederalDistrict, selectedRegion], ([newPage, newCoun
       <th>
         <div>
           <div>
-            <CustomCheckbox fillColor="#1B1B1F" :checked="false"/>
+            <CustomCheckbox
+                fillColor="#1B1B1F" :checked="schoolItemsUuids.length === 0"
+                @click="xlsxStore.globalRemovalOrAddition(filteredItems)"
+            />
             <p>Регион</p>
           </div>
 
@@ -125,25 +156,15 @@ watch([page, count, selectedFederalDistrict, selectedRegion], ([newPage, newCoun
     </tr>
     </thead>
     <tbody>
-    <tr v-for="item in pipe(
-        sortData,
-        filterByNames,
-        filterByDate,
-        filterByEduType,
-        filterByStatus
-    )({
-    schoolItems,
-    flags,
-    filterValue: filterInputValue,
-    filterDateFrom,
-    filterDateTo,
-    eduCategory: educationCategory,
-    status: institutionStatus,
-    }).schoolItems"
+    <tr v-for="item in filteredItems"
         :key="item.uuid">
       <td>
         <div class="region-container">
-          <CustomCheckbox fillColor="#1B1B1F" :checked="true"/>
+          <CustomCheckbox
+              :fillColor="!isSchoolItemAdded(item.uuid) ? '#D3D3DE' : '#1B1B1F'"
+              :checked="isSchoolItemAdded(item.uuid)"
+              @click="xlsxStore.toggleUuid(item.uuid)"
+          />
           {{ item.edu_org.region.name }}
         </div>
       </td>
@@ -167,6 +188,12 @@ watch([page, count, selectedFederalDistrict, selectedRegion], ([newPage, newCoun
   border-collapse: collapse;
   color: #55555C;
   cursor: pointer;
+
+  thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
 
   th {
     background-color: #F0F0F7;
@@ -240,9 +267,5 @@ watch([page, count, selectedFederalDistrict, selectedRegion], ([newPage, newCoun
   td:not(:last-child) {
     width: 26.00%;
   }
-
 }
 </style>
-
-//display: grid;
-//grid-template-columns: 2fr 2fr 2fr 1fr;
