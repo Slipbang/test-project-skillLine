@@ -1,7 +1,8 @@
-import type {IDate, IDayItem, IRegionsResponse, ISupplements} from "@/types/types.ts";
+import type {IDate, IDayItem, IRegionsResponse, ISchoolsItem, ISupplements} from "@/types/types.ts";
 import {comparisonParams, filterMonths} from "@/utils/utilsObjects.ts";
 import type {Ref} from "vue";
 import {onClickOutside} from "@vueuse/core";
+import * as XLSX from 'xlsx';
 
 const forbidden = ['Не определен'];
 const special = ['бакалавриат', 'специалитет' ,'магистратура',]
@@ -130,43 +131,96 @@ export const handleClickOutside = (ref: Ref<HTMLElement | null>, isOpened: Ref<b
     });
 };
 
-// сменить на xlsx
-export function jsonToCSV(jsonData: any, headersMap: any, filename = "data.csv") {
-    if (!jsonData || jsonData.length === 0) {
-        console.error("Пустой JSON!");
+export const pipe =
+    <T>(...fns: ((args: Partial<T>) => Partial<T>)[]) =>
+        (initialArgs: Partial<T>): T =>
+            fns.reduce((acc, fn) => ({ ...acc, ...fn(acc) }), initialArgs) as T;
+
+export const supplementsHeaders = {
+    reg_number: "Рег. номер",
+    serial_number: "Серийный номер",
+    form_number: "Номер формы",
+    issue_date: "Дата выдачи",
+    end_date: "Дата окончания",
+    regulatory: "Регулирующий орган",
+    "status.name": "Статус",
+    created_at: "Дата создания",
+    updated_at: "Дата обновления",
+
+    "edu_org.short_name": "Краткое название",
+    "edu_org.full_name": "Полное название",
+    "edu_org.contact_info.post_address": "Адрес",
+    "edu_org.contact_info.phone": "Телефон",
+    "edu_org.contact_info.email": "Email",
+    "edu_org.legal_info.ogrn": "ОГРН",
+    "edu_org.legal_info.inn": "ИНН",
+    "edu_org.legal_info.kpp": "КПП",
+    "edu_org.head.name": "ФИО руководителя",
+    "edu_org.head.post": "Должность руководителя",
+    "edu_org.region.name": "Регион",
+    "edu_org.federal_district.name": "Федеральный округ",
+};
+
+const eduProgramsHeader = {
+    "edu_level.name": "Уровень образования",
+    "ugs.name": "Название программы",
+    "ugs.code": "Код направления",
+    is_accredited: "Статус аккредитации",
+}
+
+type TSupplementsHeaders = typeof supplementsHeaders;
+type TEduProgramsHeaders = typeof eduProgramsHeader;
+
+// Функция для получения вложенных значений
+function getValueByPath<T extends Record<string, any>>(obj: T, path: string): any {
+    return path.split(".").reduce((acc, key) => (acc && !!acc[key] ? acc[key] : "Данные не указаны"), obj);
+}
+
+// Функция для генерации XLSX-файла
+export function jsonToXLSXParserLoader(dataArray: ISchoolsItem[], filename = "schools_data.xlsx") {
+    if (!Array.isArray(dataArray) || dataArray.length === 0) {
+        console.error("Пустой массив данных!");
         return;
     }
 
-    const csvRows = [];
+    const workbook = XLSX.utils.book_new();
 
-    // Заголовки
-    const keys = Object.keys(headersMap); // Ключи JSON
-    const headers = keys.map(key => headersMap[key]); // Названия колонок
-    csvRows.push(headers.join(";")); // Используем ";" как разделитель (можно поменять)
+    const parsedData = (supplementsItem: ISupplements,supplementsHeaders: TSupplementsHeaders, eduProgramsHeader: TEduProgramsHeaders) => {
+        const supplementsHeadersKeys = Object.keys(supplementsHeaders);
+        const eduProgramsKeys = Object.keys(eduProgramsHeader);
 
-    // Данные (заполняем таблицу)
-    jsonData.forEach((row: any) => {
-        const values = keys.map(key => {
-            const value = row[key] !== undefined ? row[key] : ""; // Если нет значения — пустая ячейка
-            return `"${value}"`; // Оборачиваем в кавычки для корректного отображения
-        });
-        csvRows.push(values.join(";"));
+        const supplementsData = supplementsHeadersKeys.map(key => getValueByPath(supplementsItem, key));
+        const eduProgramsData: string[][] = []
+        supplementsItem?.educational_programs?.forEach(program => {
+            const eduProgramData = eduProgramsKeys.map(key => getValueByPath(program, key));
+            eduProgramsData.push(eduProgramData);
+        })
+
+        return [
+            Object.values(supplementsHeaders),
+            supplementsData,
+            [],
+            Object.values(eduProgramsHeader),
+            ...eduProgramsData,
+        ]
+    }
+
+    let count = 1;
+    dataArray.forEach(item => {
+        let sheetData: any[][] = parsedData(item.supplements[0], supplementsHeaders, eduProgramsHeader);
+
+        const worksheet = XLSX.utils.aoa_to_sheet(sheetData);
+
+        const columnWidths = sheetData[0].map((_, colIndex) => ({
+            wch: Math.max(
+                ...sheetData.map(row => (row[colIndex] ? row[colIndex].toString().length : 10))
+            ) + 2 // +2 для отступов
+        }));
+
+        worksheet["!cols"] = columnWidths;
+
+        XLSX.utils.book_append_sheet(workbook, worksheet, `Школа ${count++}`);
     });
 
-    // Добавляем BOM для корректной кодировки UTF-8
-    const bom = "\uFEFF"; // BOM для UTF-8
-    const csvContent = bom + csvRows.join("\n");
-
-    // Создаем CSV-файл
-    const blob = new Blob([csvContent], {type: "text/csv;charset=utf-8;"});
-    const url = URL.createObjectURL(blob);
-
-    // Даем пользователю скачать
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    XLSX.writeFile(workbook, filename);
 }
-
