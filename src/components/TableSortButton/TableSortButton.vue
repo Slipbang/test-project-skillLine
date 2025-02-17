@@ -20,23 +20,10 @@ defineProps({
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/mixins";
+
 .sort-button {
-  width: 26px;
-  height: 26px;
-  background-color: transparent;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.sort-button:hover {
-  background-color: #D3D3DE;
-  filter: drop-shadow(1px 1px 3px gray);
-}
-.sort-button:active {
-  filter: drop-shadow(1px 1px 1px gray);
+  @include mixins.round-button;
 }
 
 .sort-icon {
@@ -44,8 +31,8 @@ defineProps({
   transition: transform 0.3s ease-out;
 
   &-rotate {
+    @extend .sort-icon;
     transform: rotateX(180deg);
-    transition: transform 0.3s ease-out;
   }
 }
 </style>
