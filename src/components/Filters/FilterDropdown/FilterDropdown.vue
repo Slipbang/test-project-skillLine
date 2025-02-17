@@ -1,12 +1,23 @@
 <script setup lang="ts">
 import FilterItem from "@/components/Filters/FilterDropdown/FilterItem/FilterItem.vue";
 import type {TSelectItem} from "@/types/types.ts";
+import {useXLSXStore} from "@/stores/xlsxStore.ts";
 interface Props {
   mapItems?: TSelectItem[],
   isOpened?: boolean,
   selectHandler?: ({name, id}: TSelectItem) => void,
 }
 defineProps<Props>()
+
+const xlsxStore = useXLSXStore();
+
+const resetUuidsAndSelect = (callback?: ({name, id}: TSelectItem) => void, item?: TSelectItem) => {
+  xlsxStore.resetSchoolItemsUuids();
+  if (callback && item) {
+    callback(item);
+  }
+};
+
 
 </script>
 
@@ -17,7 +28,7 @@ defineProps<Props>()
         :text="item.name!"
         :key="item.id"
         :isOpened="isOpened"
-        @click="!!selectHandler && selectHandler({name:item.name, id: item.id})"
+        @click="!!selectHandler && resetUuidsAndSelect(selectHandler, ({name:item.name, id: item.id})) "
     />
   </div>
 </template>
@@ -31,6 +42,7 @@ defineProps<Props>()
   background-color: white;
   transition: width 0.3s ease-out;
   border-radius: 8px;
+  z-index: 9997;
 
   &-open {
     @extend .filter-list;
