@@ -6,12 +6,16 @@ import ButtonSecondary from "@/components/ButtonSecondary/ButtonSecondary.vue";
 import {useCalendarStore} from "@/stores/calendar.ts";
 import {useFiltersStore} from "@/stores/filterStore.ts";
 import {storeToRefs} from "pinia";
+import {useXLSXStore} from "@/stores/xlsxStore.ts";
+import CustomResetButton from "@/components/CustomResetButton/CustomResetButton.vue";
 
 const calendarStore = useCalendarStore();
 const {dateTo, dateFrom} = storeToRefs(calendarStore);
 
 const filterStore = useFiltersStore();
 const {filterDateTo, filterDateFrom} = storeToRefs(filterStore);
+
+const xlsxStore = useXLSXStore();
 
 const declineHandler = () => {
   calendarStore.setDateTo(filterDateTo.value);
@@ -20,15 +24,27 @@ const declineHandler = () => {
 }
 
 const saveChangesHandler = () => {
+  xlsxStore.resetSchoolItemsUuids();
   filterStore.setDateFrom(dateFrom.value);
   filterStore.setDateTo(dateTo.value);
   calendarStore.toggleCalendarVisibility();
 }
+
+const resetAllDatesHandler = () => {
+  filterStore.resetFilterDates();
+  calendarStore.resetCalendarDates();
+}
+
 </script>
 
 <template>
   <div class="custom-calendar">
-    <h5>Выбрать период</h5>
+    <div class="calendar-header">
+      <h5>Выбрать период</h5>
+      <CustomResetButton
+          @click="resetAllDatesHandler()"
+      />
+    </div>
 
     <hr />
 
@@ -60,12 +76,17 @@ const saveChangesHandler = () => {
   background-color: #F1F4FD;
   box-shadow: 0 5px 40px 0 #0000001A;
 
-  h5 {
-    font-family: Manrope, sans-serif;
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 28px;
+  .calendar-header {
     margin: 24px 24px 0;
+    display: flex;
+    justify-content: space-between;
+
+    h5 {
+      font-family: Manrope, sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 28px;
+    }
   }
 
   hr {
