@@ -8,7 +8,10 @@ defineProps<Props>()
 </script>
 
 <template>
-  <div :class="isOpened ? 'filter-item-open' : 'filter-item'">
+  <div
+      :data-text="text.length > 21 ? 'long' : 'short'"
+      :class="isOpened ? 'filter-item-open' : 'filter-item'"
+  >
     {{text}}
   </div>
 </template>
@@ -25,14 +28,22 @@ defineProps<Props>()
   border-radius: 8px;
   transition: all 0.3s ease-out;
   overflow: hidden;
-  text-overflow: ellipsis;
-  z-index: 9997;
+  font-size: var(--text-font-size);
 
   &-open {
     @extend .filter-item;
     margin: 1px 0;
     height: 56px;
     transition: all 0.3s ease-out;
+    z-index: 9997;
   }
+}
+
+[data-text='long'].filter-item-open {
+  --text-font-size: 12px;
+}
+
+[data-text='short'].filter-item-open {
+  --text-font-size: 16px;
 }
 </style>
