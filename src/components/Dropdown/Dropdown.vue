@@ -48,6 +48,7 @@ handleClickOutside(dropdownRef, isDropdownShown, () => {
     >
       <DropdownItem
           v-for="value of buttonText"
+          :key="value"
           :value="value"
           :isDropdownOpen="isDropdownShown"
           @click="isDropdownShown && selectValueHandler(value)"
