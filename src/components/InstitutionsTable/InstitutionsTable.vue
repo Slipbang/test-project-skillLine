@@ -13,11 +13,16 @@ import {useFiltersStore} from "@/stores/filterStore.ts";
 import CustomInput from "@/components/CustomInput/CustomInput.vue";
 import {useXLSXStore} from "@/stores/xlsxStore.ts";
 import PaginationButtons from "@/components/Pagination/PaginationButtons.vue";
+import ContentLoader from "@/components/ContentLoader/ContentLoader.vue";
+import {useSchoolsApiStore} from "@/stores/schoolsApi.ts";
+import ErrorAlert from "@/components/ErrorAlert/ErrorAlert.vue";
 
 const calendarStore = useCalendarStore();
 const {isCalendarShown} = storeToRefs(calendarStore);
 const filterStore = useFiltersStore();
 const {filterInputValue} = storeToRefs(filterStore);
+const schoolApiStore = useSchoolsApiStore();
+const {loading, error} = storeToRefs(schoolApiStore);
 
 const xlsxStore = useXLSXStore();
 
@@ -52,6 +57,15 @@ const xlsxStore = useXLSXStore();
 
      <div class="table-wrapper">
        <Table />
+       <ContentLoader
+           v-if="loading"
+           v-for="(_, idx) in Array.from({ length: 8 })"
+           :key="idx"
+       />
+       <ErrorAlert
+           v-if="error"
+           :message="!!error ? error : ''"
+       />
      </div>
 
      <div class="pagination">
@@ -68,7 +82,8 @@ const xlsxStore = useXLSXStore();
 
 @use '@/assets/mixins';
 .stack {
-  min-height: 932px;
+  //min-height: 932px;
+  min-height: 100vh;
   background-color: #F1F4FD;
   width: 100%;
   padding: 48px;
@@ -82,7 +97,8 @@ const xlsxStore = useXLSXStore();
 }
 
 .block {
-  min-height: 836px;
+  //min-height: 836px;
+  min-height: calc(100vh - 96px);
   border-radius: 16px;
   background-color: #FFFFFF;
   padding: 24px;
@@ -116,7 +132,8 @@ const xlsxStore = useXLSXStore();
 
 .table-wrapper {
   margin-top: 20px;
-  height: 568px;
+  height: calc(100vh - 366px);
+  //height: 568px;
   overflow: auto;
   @include mixins.scroll-style;
 }
@@ -141,7 +158,6 @@ const xlsxStore = useXLSXStore();
     h4 {
       text-align: center;
     }
-
   }
 
   .controls {
@@ -160,6 +176,10 @@ const xlsxStore = useXLSXStore();
     }
   }
 }
-</style>
 
-//background-color: #F1F4FD;
+@media (max-height: 750px) {
+  .table-wrapper {
+    height: 568px;
+  }
+}
+</style>
