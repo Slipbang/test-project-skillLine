@@ -1,4 +1,4 @@
-import type {ICompareFlags, ISchoolsItem, PipeParams} from "@/types/types.ts";
+import type {PipeParams} from "@/types/types.ts";
 import {defineEducationCategories} from "@/utils/utilsFunction.ts";
 
 const sortStringComparisonHelper = (a: string | null, b: string | null, flag: boolean) => {
