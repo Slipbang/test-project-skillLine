@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import {createRouter, createWebHashHistory, createWebHistory} from 'vue-router';
 import App from "@/App.vue";
 import UIKit from "@/components/UIKit/UIKit.vue";
 import InstitutionsTable from "@/components/InstitutionsTable/InstitutionsTable.vue";
@@ -6,12 +6,13 @@ import InstitutionsTable from "@/components/InstitutionsTable/InstitutionsTable.
 
 
 const routes = [
-    { path: '/test-project-skillLine', component: InstitutionsTable },
-    {path: '/test-project-skillLine/ui-kit', component: UIKit},
+    { path: '/', component: InstitutionsTable },
+    {path: '/ui-kit', component: UIKit},
 ];
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHashHistory('/test-project-skillLine'),
+    //history: createWebHistory('/test-project-skillLine'),
     routes,
 });
 
