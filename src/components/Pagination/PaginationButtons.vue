@@ -65,16 +65,14 @@ const decreasePageHandler = (page: number) => {
       >
         ...
       </div>
-
-      <div class="number-buttons">
-        <SelectPageButton
-            v-if="page < pages_count"
-            @click="selectPageHandler(pages_count)"
-            :numberOfPages="pages_count"
-            :isActive="page === pages_count"
-        />
-      </div>
     </div>
+
+    <SelectPageButton
+        v-if="page < pages_count"
+        @click="selectPageHandler(pages_count)"
+        :numberOfPages="pages_count"
+        :isActive="page === pages_count"
+    />
 
     <SwipePageButton
         @click="increasePageHandler(page, pages_count)"
@@ -94,14 +92,23 @@ const decreasePageHandler = (page: number) => {
 .number-buttons {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+}
 
-  .ellipsis {
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.ellipsis {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 800px) {
+  .pages-container {
+    width: 100%;
+  }
+  .number-buttons {
+    width: 40%;
   }
 }
 </style>
