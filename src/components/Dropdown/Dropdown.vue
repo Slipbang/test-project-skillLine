@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import DropdownItem from "@/components/Dropdown/DropdownItem/DropdownItem.vue";
 import {ref} from "vue";
-import {onClickOutside} from "@vueuse/core";
 import {useSchoolsApiStore} from "@/stores/schoolsApi.ts";
 import {storeToRefs} from "pinia";
+import {handleClickOutside} from "@/utils/utilsFunction.ts";
 
 const schoolsApiStore = useSchoolsApiStore();
 const {count} = storeToRefs(schoolsApiStore);
@@ -24,16 +24,16 @@ const sortButtonsText = (value: number) => {
 }
 
 const selectValueHandler = (value: number) => {
+  schoolsApiStore.selectPage(1);
   schoolsApiStore.selectCount(value);
   sortButtonsText(value);
 }
 
-onClickOutside(dropdownRef,(event) => {
-  if (isDropdownShown.value) {
-    sortButtonsText(count.value);
-    toggleDropdownVisibility();
-  }
-});
+handleClickOutside(dropdownRef, isDropdownShown, () => {
+  toggleDropdownVisibility();
+  selectValueHandler(count.value)
+}, ['.dropdown-container-opened', '.dropdown-wrapper'])
+
 </script>
 
 <template>
@@ -44,14 +44,13 @@ onClickOutside(dropdownRef,(event) => {
   >
     <div
         class="dropdown-container"
-        :class="isDropdownShown && 'dropdown-opened'"
-        :data-active="isDropdownShown ? 'active' : 'inactive'"
+        :class="isDropdownShown ? 'dropdown-container-opened' : 'dropdown-container'"
     >
       <DropdownItem
           v-for="value of buttonText"
           :value="value"
           :isDropdownOpen="isDropdownShown"
-          @click="selectValueHandler(value)"
+          @click="isDropdownShown && selectValueHandler(value)"
       />
     </div>
   </div>
@@ -66,10 +65,10 @@ onClickOutside(dropdownRef,(event) => {
 }
 
 .dropdown-container {
-  width: var(--container-width);
-  max-height: var(--container-height);
+  width: 73px;
+  max-height: 36px;
+  transform: translateY(0);
 
-  padding: var(--dd-padding);
   margin-left: 4px;
   background-color: transparent;
   display: grid;
@@ -82,29 +81,19 @@ onClickOutside(dropdownRef,(event) => {
   transition: max-height 0.3s ease-out, transform 0.3s ease-out;
   border-radius: 7px 7px;
   overflow: hidden;
-  transform: var(--dd-transform);
   z-index: 9999;
+
+  &-opened {
+    @extend .dropdown-container;
+
+    width: 85px;
+    max-height: 196px;
+    transform: translateY(-40%);
+    background-color: #F1F4FD;
+  }
 }
 
 .dropdown-container:hover {
   background-color: #F1F4FD;
-}
-
-.dropdown-opened {
-  background-color: #F1F4FD;
-}
-
-[data-active='active'] {
-  --container-width: 85px;
-  --container-height: 196px;
-  --dd-transform: translateY(-40%);
-  --dd-padding: 4px;
-}
-
-[data-active='inactive'] {
-  --container-width: 73px;
-  --container-height: 36px;
-  --dd-transform: translateY(0);
-  --dd-padding: 0;
 }
 </style>
