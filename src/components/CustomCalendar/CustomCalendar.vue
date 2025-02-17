@@ -104,9 +104,16 @@ hr {
   align-items: center;
   justify-content: space-between;
   margin: 15px 0;
+  gap: 20px;
 
   button {
     width: 148px;
+  }
+  button:first-child {
+    margin-left: 20px;
+  }
+  button:last-child {
+    margin-right: 20px;
   }
 }
 

@@ -169,6 +169,11 @@ const regionFilterInputValue = ref<string>('')
   z-index: 9995;
   flex-wrap: wrap;
 
+  svg {
+    min-width: 16px;
+    min-height: 16px;
+  }
+
   input {
     box-sizing: border-box;
     width: calc(100% - 10px);
