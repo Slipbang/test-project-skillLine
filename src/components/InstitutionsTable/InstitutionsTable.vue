@@ -72,6 +72,7 @@ const xlsxStore = useXLSXStore();
   background-color: #F1F4FD;
   width: 100%;
   padding: 48px;
+  transition: padding 0.2s ease-out;
 }
 .calendar {
   position: absolute;
@@ -129,6 +130,12 @@ const xlsxStore = useXLSXStore();
 }
 
 @media (max-width: 992px) {
+  .stack {
+    padding: 12px;
+  }
+  .calendar {
+    left: 6px;
+  }
   .cont {
     justify-content: center;
     h4 {
@@ -144,6 +151,9 @@ const xlsxStore = useXLSXStore();
 }
 
 @media (max-width: 630px) {
+  .stack {
+    padding: 6px;
+  }
   .controls {
     input, button {
       width: 100%;

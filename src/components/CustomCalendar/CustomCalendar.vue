@@ -75,38 +75,45 @@ const resetAllDatesHandler = () => {
   border-radius: 16px;
   background-color: #F1F4FD;
   box-shadow: 0 5px 40px 0 #0000001A;
+}
 
-  .calendar-header {
-    margin: 24px 24px 0;
-    display: flex;
-    justify-content: space-between;
+.calendar-header {
+  margin: 24px 24px 0;
+  display: flex;
+  justify-content: space-between;
 
-    h5 {
-      font-family: Manrope, sans-serif;
-      font-weight: 700;
-      font-size: 20px;
-      line-height: 28px;
-    }
-  }
-
-  hr {
-    margin: 15px 24px;
-    border-top: 1px solid #D3D3DE;
-  }
-
-  .month-selector-container {
-    margin: 24px 16px;
-  }
-
-  .buttons-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 15px 0;
-
-    button {
-      width: 148px;
-    }
+  h5 {
+    font-family: Manrope, sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 28px;
   }
 }
+
+hr {
+  margin: 15px 24px;
+  border-top: 1px solid #D3D3DE;
+}
+
+.month-selector-container {
+  margin: 24px 16px;
+}
+
+.buttons-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 15px 0;
+
+  button {
+    width: 148px;
+  }
+}
+
+@media (max-width: 450px) {
+  .custom-calendar {
+    width: calc(100vw - 12px);
+  }
+}
+
 </style>

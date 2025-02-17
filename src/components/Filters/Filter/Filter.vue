@@ -38,7 +38,6 @@ defineProps<Props>();
 .filter {
   box-sizing: content-box;
   width: 100%;
-  min-width: 126px;
   cursor: pointer;
   max-height: 56px;
   border: 1px solid #D3D3DE;
@@ -67,6 +66,7 @@ defineProps<Props>();
     @extend .filter;
     max-height: 600px;
     transition: all 0.3s ease-out;
+    z-index: 9999;
   }
 }
 

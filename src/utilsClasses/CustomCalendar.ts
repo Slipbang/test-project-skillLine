@@ -13,7 +13,6 @@ export class CustomCalendar {
 
     set currentDate(date: Date) {
         this._currentDate = date;
-        console.log(this._currentDate)
     }
 
     get year(): number {

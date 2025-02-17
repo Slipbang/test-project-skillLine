@@ -152,6 +152,7 @@ const regionFilterInputValue = ref<string>('')
 .filters {
   min-height: 56px;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 10px;
   z-index: 9997;
@@ -159,6 +160,9 @@ const regionFilterInputValue = ref<string>('')
 
   .filter-wrapper {
     flex: 1;
+    width: 100%;
+    height: 56px;
+    min-width: 126px;
     position: relative;
     z-index: 9997;
     flex-wrap: wrap;

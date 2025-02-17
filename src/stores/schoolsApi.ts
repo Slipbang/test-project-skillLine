@@ -33,7 +33,7 @@ export const useSchoolsApiStore = defineStore("schools", {
             this.loading = true;
             this.error = null;
             this.schoolItems = [];
-
+            console.log('school api fetched')
             const queryParams = new URLSearchParams({
                 page: page.toString(),
                 count: count.toString(),
