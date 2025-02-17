@@ -1,13 +1,32 @@
 <script setup lang="ts">
 import DownloadButtonIcon from '../icons/DownloadButtonIcon.vue';
+import {useXLSXStore} from "@/stores/xlsxStore.ts";
+import {useSchoolsApiStore} from "@/stores/schoolsApi.ts";
+import {storeToRefs} from "pinia";
+import type {ISchoolsItem} from "@/types/types.ts";
+import {jsonToXLSXParserLoader} from "@/utils/utilsFunction.ts";
 
 defineProps({
   text: String,
 });
+
+const xlsxStore = useXLSXStore();
+const schoolApiStore = useSchoolsApiStore();
+const {schoolItems} = storeToRefs(schoolApiStore);
+
+const downloadXlsxHandler = (schoolItems: ISchoolsItem[]) => {
+  const filteredSchoolItems = xlsxStore.filterByUuids(schoolItems);
+  if (filteredSchoolItems.length > 0) jsonToXLSXParserLoader(filteredSchoolItems);
+  else console.error("пустой объект в downloadXlsxHandler");
+}
+
 </script>
 
 <template>
-  <button class="download-button">
+  <button
+      class="download-button"
+      @click="downloadXlsxHandler(schoolItems)"
+  >
     <DownloadButtonIcon />
     {{ text }}
   </button>
