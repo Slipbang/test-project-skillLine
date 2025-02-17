@@ -35,7 +35,15 @@ export const useFiltersStore = defineStore('filters', () => {
         name: 'Все регионы'
     })
 
+    const currentSchoolItemValue = ref<number>(0);
+
+    const setCurrentSchoolItemValue = (value: number) => {
+        currentSchoolItemValue.value = value;
+    }
+
     const toggleIsRegionsFilterOpened = () => {
+        // const elements  = document.querySelectorAll('.filter-item-open');
+        // [...elements]?.pop()?.scrollIntoView({ inline: "end"})
         isRegionRegionsFilterOpened.value = !isRegionRegionsFilterOpened.value;
     }
     const toggleIsFederalDistrictFilterOpened = () => {
@@ -73,6 +81,16 @@ export const useFiltersStore = defineStore('filters', () => {
         }
     }
 
+    const resetFilterDates = () => {
+        const resetValue = {
+            dayNum: null,
+            month: null,
+            year: null,
+        };
+        filterDateTo.value = resetValue;
+        filterDateFrom.value = resetValue;
+    }
+
     return {
         filterDateFrom,
         filterDateTo,
@@ -85,6 +103,9 @@ export const useFiltersStore = defineStore('filters', () => {
         selectedFederalDistrict,
         isRegionRegionsFilterOpened,
         selectedRegion,
+        currentSchoolItemValue,
+        setCurrentSchoolItemValue,
+        resetFilterDates,
         setSelectedRegion,
         toggleIsRegionsFilterOpened,
         setSelectedFederalDistrict,
