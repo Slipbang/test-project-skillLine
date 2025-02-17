@@ -24,6 +24,7 @@ defineProps<Props>();
         :selectHandler="selectHandler"
     />
     <div
+        :data-description="text.length > 21 ? 'long' : 'short'"
         class="filter-description"
         v-if="!isOpened"
     >
@@ -43,34 +44,41 @@ defineProps<Props>();
   border: 1px solid #D3D3DE;
   border-radius: 10px;
   transition: background-color 0.3s ease-out, all 0.3s ease-out;
-  z-index: 9997;
+  z-index: 9995;
   overflow: auto;
   position: absolute;
-
-  .filter-description {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-    height: 56px;
-
-    p {
-      font-size: 16px;
-      font-family: 'Gotham Pro', sans-serif;
-      font-weight: 400;
-      line-height: 21px;
-    }
-  }
 
   &-open {
     @extend .filter;
     max-height: 600px;
     transition: all 0.3s ease-out;
-    z-index: 9999;
+    z-index: 9997;
   }
 }
 
 .filter:hover {
   background-color: #F1F4FD;
+}
+
+.filter-description {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  min-height: 56px;
+
+  p {
+    font-size: var(--description-font-size);
+    font-family: 'Gotham Pro', sans-serif;
+    font-weight: 400;
+    line-height: 21px;
+  }
+}
+[data-description='long'].filter-description {
+  --description-font-size: 12px;
+}
+
+[data-description='short'].filter-description {
+  --description-font-size: 16px;
 }
 </style>
