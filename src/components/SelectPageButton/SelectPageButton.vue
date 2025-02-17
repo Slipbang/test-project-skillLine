@@ -1,8 +1,10 @@
 <script setup lang="ts">
-defineProps({
-  numberOfPages: Number,
-  isActive: Boolean,
-})
+interface Props {
+  numberOfPages: number;
+  isActive: boolean;
+}
+
+defineProps<Props>()
 </script>
 
 <template>

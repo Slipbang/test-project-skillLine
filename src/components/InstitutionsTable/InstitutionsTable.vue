@@ -25,7 +25,6 @@ const schoolApiStore = useSchoolsApiStore();
 const {loading, error} = storeToRefs(schoolApiStore);
 
 const xlsxStore = useXLSXStore();
-
 </script>
 
 <template>

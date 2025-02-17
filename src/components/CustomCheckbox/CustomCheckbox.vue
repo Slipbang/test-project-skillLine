@@ -2,10 +2,13 @@
 import CheckboxIcon from "@/components/icons/CheckboxIcon.vue";
 import IconAdd from "@/components/icons/IconAdd.vue";
 import IconDelete from "@/components/icons/IconDelete.vue";
-defineProps({
-  checked: Boolean,
-  fillColor: String,
-})
+
+interface IProps {
+  checked: boolean;
+  fillColor: string;
+}
+
+defineProps<IProps>()
 </script>
 
 <template>

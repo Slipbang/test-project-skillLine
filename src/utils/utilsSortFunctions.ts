@@ -22,7 +22,7 @@ export const educationLvl = {
 const defineMaxEducationLevelHelper = (educationItems: string[]): number => {
     let max = Number.MIN_SAFE_INTEGER;
 
-    educationItems.forEach((item, i) => {
+    educationItems.forEach((item) => {
         max = Math.max(educationLvl[item as keyof typeof educationLvl], max)
     })
 

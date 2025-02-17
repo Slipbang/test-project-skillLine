@@ -1,8 +1,10 @@
 <script setup lang="ts">
-defineProps({
-  isDisabled: Boolean,
-  text: String,
-})
+interface Props {
+  isDisabled: boolean,
+  text: string,
+}
+
+defineProps<Props>()
 </script>
 
 <template>

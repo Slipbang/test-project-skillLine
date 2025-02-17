@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import LeftArrowIcon from "@/components/icons/LeftArrowIcon.vue";
 import RightArrowIcon from "@/components/icons/RightArrowIcon.vue";
 import SwipePageButton from "@/components/SwipePageButton/SwipePageButton.vue";

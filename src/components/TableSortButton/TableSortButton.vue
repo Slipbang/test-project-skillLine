@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import SortIcon from "@/components/icons/SortIcon.vue";
 
-defineProps({
-  isAscending: {
-    type: Boolean,
-    required: false,
-    default: undefined,
-  }
-})
+interface Props {
+  isAscending?: boolean;
+}
+
+defineProps<Props>()
 </script>
 
 <template>

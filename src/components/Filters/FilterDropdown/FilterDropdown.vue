@@ -17,8 +17,6 @@ const resetUuidsAndSelect = (callback?: ({name, id}: TSelectItem) => void, item?
     callback(item);
   }
 };
-
-
 </script>
 
 <template>

@@ -6,9 +6,11 @@ import {storeToRefs} from "pinia";
 import type {ISchoolsItem} from "@/types/types.ts";
 import {jsonToXLSXParserLoader} from "@/utils/utilsFunction.ts";
 
-defineProps({
-  text: String,
-});
+interface Props {
+  text: string,
+}
+
+defineProps<Props>();
 
 const xlsxStore = useXLSXStore();
 const schoolApiStore = useSchoolsApiStore();

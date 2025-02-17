@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
-defineProps({
-  value: Number,
-  isDropdownOpen: Boolean,
-})
+
+interface Props {
+  value: number;
+  isDropdownOpen: boolean;
+}
+
+defineProps<Props>()
 </script>
 
 <template>
