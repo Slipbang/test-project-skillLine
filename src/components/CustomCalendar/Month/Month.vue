@@ -71,6 +71,7 @@ const movePointerHandler = (date: IDayItem) => {
           class="prev"
           v-for="dayData in calendar.calendarArray.prevMonthDays"
           :class="defineDayClass(dayData, dateFrom, dateTo)"
+          :key="dayData.dayNum"
       >
         {{ dayData.dayNum }}
       </div>
@@ -80,6 +81,7 @@ const movePointerHandler = (date: IDayItem) => {
           v-for="dayData in calendar.calendarArray.currMonthDays"
           @click="toggleMouseEnterHandler(dayData)"
           @mouseenter="movePointerHandler(dayData)"
+          :key="dayData.dayNum"
       >
         {{ dayData.dayNum }}
       </div>
@@ -88,6 +90,7 @@ const movePointerHandler = (date: IDayItem) => {
           class="next"
           v-for="dayData in calendar.calendarArray.nextMonthDays"
           :class="defineDayClass(dayData, dateFrom, dateTo)"
+          :key="dayData.dayNum"
       >
         {{ dayData.dayNum }}
       </div>
