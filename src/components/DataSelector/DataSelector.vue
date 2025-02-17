@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import Dropdown from "@/components/Dropdown/Dropdown.vue";
-
+import {useSchoolsApiStore} from "@/stores/schoolsApi.ts";
+import {storeToRefs} from "pinia";
+import {useFiltersStore} from "@/stores/filterStore.ts";
+const schoolApiStore = useSchoolsApiStore();
+const {schoolItems} = storeToRefs(schoolApiStore);
+const filterStore = useFiltersStore();
+const {currentSchoolItemValue} = storeToRefs(filterStore);
 </script>
 
 <template>
   <div class="selector-container">
-    <p>1-8 из 50 записей</p>
+    <p>{{currentSchoolItemValue}} из {{schoolItems?.length || 0}} записей</p>
 
     <div class="drop-container">
       <p>Показывать</p>
@@ -17,6 +23,7 @@ import Dropdown from "@/components/Dropdown/Dropdown.vue";
 <style scoped lang="scss">
 .selector-container {
   display: flex;
+  gap: 5px;
   justify-content: space-between;
   align-items: center;
   width: 275px;
@@ -26,12 +33,18 @@ import Dropdown from "@/components/Dropdown/Dropdown.vue";
     font-size: 12px;
     color: #687588;
   }
+}
 
-  .drop-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 158px;
+.drop-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 158px;
+}
+
+@media (max-width: 800px) {
+  .selector-container {
+    width: 100%;
   }
 }
 </style>
