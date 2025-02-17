@@ -42,7 +42,6 @@ const resetUuidsAndSelect = (callback?: ({name, id}: TSelectItem) => void, item?
   background-color: white;
   transition: width 0.3s ease-out;
   border-radius: 8px;
-  z-index: 9997;
 
   &-open {
     @extend .filter-list;
