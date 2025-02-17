@@ -15,7 +15,7 @@ const {selectedYear, selectedMonth} = storeToRefs(calendarStore);
   <div class="month-selector">
     <button
         @click="calendarStore.decreaseMonth()"
-        class="svg-button"
+        class="select-month-button"
     >
       <LeftArrowIcon />
     </button>
@@ -24,7 +24,7 @@ const {selectedYear, selectedMonth} = storeToRefs(calendarStore);
 
     <button
         @click="calendarStore.increaseMonth()"
-        class="svg-button"
+        class="select-month-button"
     >
       <RightArrowIcon />
     </button>
@@ -32,6 +32,7 @@ const {selectedYear, selectedMonth} = storeToRefs(calendarStore);
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/mixins";
 .month-selector {
   display: flex;
   align-items: center;
@@ -46,23 +47,8 @@ const {selectedYear, selectedMonth} = storeToRefs(calendarStore);
     text-align: center;
   }
 
-  .svg-button {
-    border: none;
-    background-color: transparent;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    cursor: pointer;
-  }
-  .svg-button:hover {
-    background-color: #D3D3DE;
-    filter: drop-shadow(1px 1px 3px gray);
-  }
-  .svg-button:active {
-    filter: drop-shadow(1px 1px 1px gray);
+  .select-month-button {
+    @include mixins.round-button;
   }
 }
 </style>
