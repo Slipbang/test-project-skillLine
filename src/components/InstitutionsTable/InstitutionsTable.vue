@@ -87,6 +87,7 @@ const xlsxStore = useXLSXStore();
   width: 100%;
   padding: 48px;
   transition: padding 0.2s ease-out;
+  @include mixins.scroll-style;
 }
 .calendar {
   position: absolute;
@@ -134,7 +135,6 @@ const xlsxStore = useXLSXStore();
   height: calc(100vh - 366px);
   //height: 568px;
   overflow: auto;
-  @include mixins.scroll-style;
 }
 
 .pagination {

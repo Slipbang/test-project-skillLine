@@ -1,9 +1,6 @@
-import {createRouter, createWebHashHistory, createWebHistory} from 'vue-router';
-import App from "@/App.vue";
+import {createRouter, createWebHashHistory} from 'vue-router';
 import UIKit from "@/components/UIKit/UIKit.vue";
 import InstitutionsTable from "@/components/InstitutionsTable/InstitutionsTable.vue";
-
-
 
 const routes = [
     { path: '/', component: InstitutionsTable },
