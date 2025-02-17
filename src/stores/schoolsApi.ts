@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 import type {ISchoolApiResponse, ISchoolsItem, IServerResponse} from "@/types/types.ts";
+import {httpErrorStatusCodes} from "@/utils/utilsObjects.ts";
 
 interface IInitialState {
     schoolItems: ISchoolsItem[];
@@ -47,7 +48,11 @@ export const useSchoolsApiStore = defineStore("schools", {
                 this.schoolItems = response.data.data.list;
                 this.pages_count = response.data.data.pages_count;
             } catch (err) {
-                this.error = err instanceof Error ? err.message : "Ошибка запроса";
+                if (axios.isAxiosError(err) && err.response) {
+                    this.error = (err?.status || 0) in httpErrorStatusCodes ? httpErrorStatusCodes[err.status as keyof typeof httpErrorStatusCodes] : 'Ошибка запроса';
+                } else {
+                    this.error = 'Ошибка запроса';
+                }
             } finally {
                 this.loading = false;
             }

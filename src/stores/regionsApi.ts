@@ -19,6 +19,15 @@ export const useRegionsApiStore = defineStore("regions", {
             this.loading = true;
             this.error = null;
             this.regions = [];
+            const ssRegions = sessionStorage.getItem('regions-api-store');
+            if (ssRegions && ssRegions.length > 0) {
+                try {
+                    this.regions = [...JSON.parse(ssRegions)];
+                    return;
+                } catch (err) {
+                    console.error(err)
+                }
+            }
             const tmpRegion = {
                 id: -1,
                 name: 'Все регионы',
@@ -28,10 +37,15 @@ export const useRegionsApiStore = defineStore("regions", {
 
             try {
                 const response = await axios.get<IServerResponse<IRegionsResponse>>(`https://schooldb.skillline.ru/api/regions`);
-
                 this.regions = [tmpRegion,...response.data.data];
+                sessionStorage.setItem('regions-api-store', JSON.stringify(this.regions));
             } catch (err) {
                 this.error = err instanceof Error ? err.message : "Ошибка запроса региона";
+                const errorRegion = {
+                    id: -1,
+                    name: 'Ошибка загрузки регионов',
+                }
+                this.regions = [tmpRegion, errorRegion]
             } finally {
                 this.loading = false;
             }
