@@ -63,7 +63,7 @@ const xlsxStore = useXLSXStore();
        />
        <ErrorAlert
            v-if="error"
-           :message="!!error ? error : ''"
+           :message="!!error ? error : 'Ошибка запроса'"
        />
      </div>
 
