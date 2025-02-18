@@ -12,6 +12,7 @@ import {educationCategoriesNames, statuses} from "@/utils/utilsObjects.ts";
 import {useFederalDistrictsApiStore} from "@/stores/federalDistrictsApi.ts";
 import {useRegionsApiStore} from "@/stores/regionsApi.ts";
 import CustomInput from "@/components/CustomInput/CustomInput.vue";
+import type {TSelectItem} from "@/types/types.ts";
 
 const calendarRef = ref<HTMLElement | null>(null);
 const eduLvlRef = ref<HTMLElement | null>(null);
@@ -71,8 +72,12 @@ const {
   regions,
 } = storeToRefs(regionsApiStore);
 
-const regionFilterInputValue = ref<string>('')
+const regionFilterInputValue = ref<string>('');
 
+const setSelectedRegionHandler = (region: TSelectItem) => {
+  regionFilterInputValue.value = ('');
+  filterStore.setSelectedRegion(region);
+}
 </script>
 
 <template>
@@ -140,7 +145,7 @@ const regionFilterInputValue = ref<string>('')
           :text="selectedRegion.name"
           :icon="ArrowDownIcon"
           @click="filterStore.toggleIsRegionsFilterOpened"
-          :selectHandler="filterStore.setSelectedRegion"
+          :selectHandler="setSelectedRegionHandler"
       />
     </div>
   </div>
