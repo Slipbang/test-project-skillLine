@@ -5,18 +5,20 @@
   "type": "module",
   "homepage": "https://slipbang.github.io/test-project-skillLine",
   "scripts": {
-    "dev": "vite",
     "deploy": "gh-pages -d dist",
-    "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
-    "type-check": "vue-tsc --build"
+    "type-check": "vue-tsc --build",
+    "dev": "nuxt dev",
+    "build": "nuxt build"
   },
   "dependencies": {
+    "@pinia/nuxt": "^0.10.1",
     "@vueuse/core": "^12.5.0",
     "axios": "^1.7.9",
     "lodash.debounce": "^4.0.8",
-    "pinia": "^2.3.1",
+    "nuxt": "^3.15.4",
+    "pinia": "^3.0.1",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",
     "xlsx": "^0.18.5"
@@ -29,7 +31,8 @@
     "@vue/tsconfig": "^0.7.0",
     "gh-pages": "^6.3.0",
     "npm-run-all2": "^7.0.2",
-    "sass": "^1.84.0",
+    "sass": "^1.85.0",
+    "sass-loader": "^16.0.5",
     "typescript": "~5.7.3",
     "vite": "^6.0.11",
     "vite-plugin-vue-devtools": "^7.7.1",
